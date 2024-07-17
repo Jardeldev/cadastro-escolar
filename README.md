@@ -291,3 +291,74 @@ Instituição XYZ
 │   │   │   │   │   ├── Professor: Rosalind Franklin
 │   │   │   │   │   ├── Horário: Vespertino (13:00 - 17:00)
 ```
+
+Para gerenciar os dados da Instituição XYZ, incluindo suas escolas, séries, turmas, professores, horários e disciplinas, será necessário criar várias telas no sistema. Vou descrever as telas essenciais e explicar cada uma delas detalhadamente para que seu estagiário entenda a importância e a função de cada tela.
+
+### Telas Necessárias
+
+1. **Tela de Login**: Uma tela inicial para que os usuários possam fazer login no sistema, garantindo que apenas usuários autorizados tenham acesso às funcionalidades de gestão.
+2. **Tela de Dashboard**: Após o login, o usuário será redirecionado para um painel de controle (dashboard) que oferece uma visão geral do sistema, mostrando informações importantes e atalhos para as principais funcionalidades.
+3. **Tela de Listagem de Instituições**: Uma tela que lista todas as instituições cadastradas no sistema. Aqui, o usuário pode ver a lista de instituições e selecionar uma para gerenciar suas escolas.
+4. **Tela de Detalhes da Instituição**: Ao selecionar uma instituição na tela de listagem, o usuário será levado para esta tela, onde pode ver e editar os detalhes da instituição, bem como acessar as escolas associadas a ela.
+5. **Tela de Listagem de Escolas**: Uma tela que lista todas as escolas de uma determinada instituição. O usuário pode selecionar uma escola para gerenciar suas séries e turmas.
+6. **Tela de Detalhes da Escola**: Ao selecionar uma escola na tela de listagem, o usuário será levado para esta tela, onde pode ver e editar os detalhes da escola, bem como acessar as séries associadas a ela.
+7. **Tela de Listagem de Séries**: Uma tela que lista todas as séries de uma determinada escola. O usuário pode selecionar uma série para gerenciar suas turmas.
+8. **Tela de Detalhes da Série**: Ao selecionar uma série na tela de listagem, o usuário será levado para esta tela, onde pode ver e editar os detalhes da série, bem como acessar as turmas associadas a ela.
+9. **Tela de Listagem de Turmas**: Uma tela que lista todas as turmas de uma determinada série. O usuário pode selecionar uma turma para gerenciar seus detalhes, incluindo professores, horários e disciplinas.
+10. **Tela de Detalhes da Turma**: Ao selecionar uma turma na tela de listagem, o usuário será levado para esta tela, onde pode ver e editar os detalhes da turma, incluindo a atribuição de professores, horários e disciplinas.
+
+### Descrição Detalhada das Telas
+
+#### Tela de Login
+- **Objetivo**: Autenticar o usuário e garantir acesso seguro ao sistema.
+- **Funcionalidades**: Campos para nome de usuário e senha, botão de login, e opção de recuperação de senha.
+
+#### Tela de Dashboard
+- **Objetivo**: Fornecer uma visão geral do sistema e acesso rápido às principais funcionalidades.
+- **Funcionalidades**: Resumo de instituições, escolas, séries e turmas, atalhos para as telas de gestão, notificações e gráficos de uso.
+
+#### Tela de Listagem de Instituições
+- **Objetivo**: Listar todas as instituições cadastradas no sistema.
+- **Funcionalidades**: Exibição de uma lista de instituições com opções para adicionar nova instituição, editar ou excluir instituições existentes.
+
+#### Tela de Detalhes da Instituição
+- **Objetivo**: Exibir e editar os detalhes de uma instituição específica.
+- **Funcionalidades**: Campos para nome da instituição, endereço, contato, e lista de escolas associadas com opções para adicionar, editar ou remover escolas.
+
+#### Tela de Listagem de Escolas
+- **Objetivo**: Listar todas as escolas associadas a uma instituição.
+- **Funcionalidades**: Exibição de uma lista de escolas com opções para adicionar nova escola, editar ou excluir escolas existentes.
+
+#### Tela de Detalhes da Escola
+- **Objetivo**: Exibir e editar os detalhes de uma escola específica.
+- **Funcionalidades**: Campos para nome da escola, endereço, contato, e lista de séries associadas com opções para adicionar, editar ou remover séries.
+
+#### Tela de Listagem de Séries
+- **Objetivo**: Listar todas as séries de uma escola.
+- **Funcionalidades**: Exibição de uma lista de séries com opções para adicionar nova série, editar ou excluir séries existentes.
+
+#### Tela de Detalhes da Série
+- **Objetivo**: Exibir e editar os detalhes de uma série específica.
+- **Funcionalidades**: Campos para nome da série e lista de turmas associadas com opções para adicionar, editar ou remover turmas.
+
+#### Tela de Listagem de Turmas
+- **Objetivo**: Listar todas as turmas de uma série.
+- **Funcionalidades**: Exibição de uma lista de turmas com opções para adicionar nova turma, editar ou excluir turmas existentes.
+
+#### Tela de Detalhes da Turma
+- **Objetivo**: Exibir e editar os detalhes de uma turma específica.
+- **Funcionalidades**: Campos para nome da turma, professor responsável, horário das aulas, e disciplinas ministradas.
+
+### Marcos de Conclusão do Projeto
+
+Para definir o projeto como "finalizado", os seguintes marcos devem ser alcançados:
+
+1. **Requisitos e Planejamento**: Todos os requisitos foram identificados, documentados e o plano do projeto foi aprovado.
+2. **Desenvolvimento**: Todas as funcionalidades principais foram desenvolvidas, integradas e testadas.
+3. **Testes e Qualidade**: Os testes unitários, de integração, sistema e aceitação do usuário foram concluídos com sucesso.
+4. **Documentação**: A documentação do código, do usuário final e do sistema foi completada.
+5. **Desempenho e Segurança**: O sistema foi otimizado para desempenho e passou em todos os testes de carga e segurança.
+6. **Treinamento e Transferência de Conhecimento**: Os usuários finais foram treinados e a transferência de conhecimento para a equipe de suporte/manutenção foi realizada.
+7. **Entrega e Implementação**: O sistema foi entregue, implementado no ambiente de produção e todos os problemas de lançamento foram resolvidos.
+8. **Feedback e Ajustes Finais**: O feedback pós-implementação foi coletado, analisado e os ajustes finais foram realizados.
+9. **Encerramento do Projeto**: A reunião de encerramento do projeto foi realizada, todas as entregas foram aceitas pelo cliente/usuário final, a documentação de encerramento foi concluída e arquivada, e o projeto foi oficialmente encerrado.
