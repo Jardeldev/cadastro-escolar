@@ -1,7 +1,13 @@
-// src/data/classes.ts
+export interface Class {
+  id: number;
+  name: string;
+  description?: string;
+}
 
-export const classes = [
-    { id: 1, seriesId: 1, name: 'Creche' },
-    { id: 2, seriesId: 1, name: 'Pré I' },
-    { id: 3, seriesId: 2, name: '1º ano' }
-  ]
+const classes: Class[] = [
+  { id: 1, name: 'Class 1', description: 'Description for Class 1' },
+  { id: 2, name: 'Class 2', description: 'Description for Class 2' },
+  // Adicione mais classes conforme necessário
+];
+
+export default classes;

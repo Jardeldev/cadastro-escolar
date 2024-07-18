@@ -1,7 +1,13 @@
-// src/data/series.ts
+export interface Series {
+  id: number;
+  name: string;
+  description?: string;
+}
 
-export const series = [
-    { id: 1, schoolId: 1, name: 'Educação Infantil' },
-    { id: 2, schoolId: 1, name: 'Ensino Fundamental I' },
-    { id: 3, schoolId: 2, name: 'Ensino Fundamental II' }
-  ]
+const series: Series[] = [
+  { id: 1, name: 'Series 1', description: 'Description for Series 1' },
+  { id: 2, name: 'Series 2', description: 'Description for Series 2' },
+  // Adicione mais séries conforme necessário
+];
+
+export default series;

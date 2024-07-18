@@ -1,6 +1,13 @@
-// src/data/turmas.ts
+export interface Turma {
+  id: number;
+  name: string;
+  description?: string;
+}
 
-export const turmas = [
-    { id: 1, classId: 1, name: 'Turma A', professor: 'Marie Curie', horario: 'Matutino (08:00 - 12:00)', disciplinas: ['Brincadeiras Educativas', 'Artes'] },
-    { id: 2, classId: 1, name: 'Turma B', professor: 'Isaac Newton', horario: 'Vespertino (13:00 - 17:00)', disciplinas: ['Brincadeiras Educativas', 'Artes'] }
-  ]
+const turmas: Turma[] = [
+  { id: 1, name: 'Turma 1', description: 'Description for Turma 1' },
+  { id: 2, name: 'Turma 2', description: 'Description for Turma 2' },
+  // Adicione mais turmas conforme necessário
+];
+
+export default turmas;
