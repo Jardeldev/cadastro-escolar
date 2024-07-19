@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { IonicVue } from '@ionic/vue'
+import { IonAccordion, IonAccordionGroup, IonApp, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonMenu, IonMenuButton, IonPage, IonRouterOutlet, IonTitle, IonToolbar, IonicVue } from '@ionic/vue'
 import App from './App.vue'
 import router from './router'
 
@@ -32,11 +32,26 @@ import '@ionic/vue/css/palettes/dark.system.css'
 
 /* Theme variables */
 import './theme/variables.css'
+// Register Ionic components globally
 
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
-
+app.component('ion-app', IonApp)
+app.component('ion-menu', IonMenu)
+app.component('ion-header', IonHeader)
+app.component('ion-toolbar', IonToolbar)
+app.component('ion-title', IonTitle)
+app.component('ion-content', IonContent)
+app.component('ion-accordion-group', IonAccordionGroup)
+app.component('ion-accordion', IonAccordion)
+app.component('ion-item', IonItem)
+app.component('ion-label', IonLabel)
+app.component('ion-button', IonButton)
+app.component('ion-buttons', IonButtons)
+app.component('ion-menu-button', IonMenuButton)
+app.component('ion-page', IonPage)
+app.component('ion-router-outlet', IonRouterOutlet)
 router.isReady().then(() => {
   app.mount('#app')
 })

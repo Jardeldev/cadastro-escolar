@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { IonAccordion, IonAccordionGroup, IonApp, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonMenu, IonMenuButton, IonPage, IonRouterOutlet, IonTitle, IonToolbar } from '@ionic/vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+function goToRoute(route: string) {
+  router.push(route)
+  console.log(route)
+}
 </script>
 
 <template>
@@ -17,7 +24,7 @@ import { IonAccordion, IonAccordionGroup, IonApp, IonButton, IonButtons, IonCont
               <ion-label>Dashboard</ion-label>
             </ion-item>
             <div slot="content" class="ion-padding">
-              <ion-button expand="block">
+              <ion-button expand="block" href="/dashboard">
                 Visão Geral
               </ion-button>
             </div>
@@ -27,7 +34,7 @@ import { IonAccordion, IonAccordionGroup, IonApp, IonButton, IonButtons, IonCont
               <ion-label>Gestão de Instituições</ion-label>
             </ion-item>
             <div slot="content" class="ion-padding">
-              <ion-button expand="block">
+              <ion-button expand="block" @click="goToRoute('/instituicoes/lista')">
                 Lista de Instituições
               </ion-button>
               <ion-button expand="block">
