@@ -1,25 +1,29 @@
-<script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { schools } from '@/data/schools'
-
-const route = useRoute()
-const institutionId = Number.parseInt(route.params.institutionId)
-
-const filteredSchools = computed(() => {
-  return schools.filter(school => school.institutionId === institutionId)
-})
-
-function selectSchool(school: any) {
-  console.log('Selected school:', school)
-  // Navegar para a página das séries
-}
-</script>
-
 <template>
   <ion-list>
-    <ion-item v-for="school in filteredSchools" :key="school.id" @click="selectSchool(school)">
+    <ion-item v-for="school in schools" :key="school.id">
       <ion-label>{{ school.name }}</ion-label>
+      <ion-button slot="end" @click="$emit('view-details', school)">Detalhes</ion-button>
     </ion-item>
   </ion-list>
 </template>
+
+<script lang="ts">
+import { defineComponent, PropType, toRefs } from 'vue';
+import { School } from '@/data/schools';
+
+export default defineComponent({
+  props: {
+    schools: {
+      type: Array as PropType<School[]>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { schools } = toRefs(props);
+
+    return {
+      schools,
+    };
+  },
+});
+</script>

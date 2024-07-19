@@ -5,6 +5,11 @@ import Login from '../views/Login.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import InstitutionManagement from '@/views/InstitutionManagement.vue'
 import SchoolManagement from '@/views/SchoolManagement.vue'
+import SeriesManagement from '@/views/SeriesManagement.vue';
+import TurmaManagement from '@/views/TurmaManagement.vue';
+import ClassManagement from '@/views/ClassManagement.vue';
+import Institution from '@/views/Institution.vue'
+import School from '@/views/School.vue'
 
 const routes = [
   {
@@ -13,29 +18,44 @@ const routes = [
   },
 
   {
-    path: '/home',
-    component: Login, 
-  },
-
-  {
-    path: '/login',
-    component: Login, 
-  },
-
-  {
     path: '/dashboard',
     component: Dashboard,
   },
 
   {
-    path: '/institutions',
+    path: '/instituicoes',
     component: InstitutionManagement,
   },
 
   {
-    path: '/institutions/:id/schools',
-    component: SchoolManagement,
-  }
+    path: '/instituicoes/lista',
+    component: Institution,
+  },
+
+  {
+    path: '/escolas',
+    component: SchoolManagement, 
+  },
+
+  {
+    path: '/escolas/lista',
+    component: School, 
+  },
+
+  {
+    path: '/series',
+    component: SeriesManagement, 
+  },
+
+  {
+    path: '/classes',
+    component: ClassManagement,
+  },
+
+  {
+    path: '/turmas',
+    component: TurmaManagement,
+  },
 
 ]
 
