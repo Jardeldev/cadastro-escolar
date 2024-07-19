@@ -14,7 +14,7 @@
     "lint:fix": "eslint --config ./eslint.config.js . --fix"
   },
   "dependencies": {
-    "@antfu/eslint-config": "^2.22.4",
+    "@antfu/eslint-config": "^2.23.0",
     "@capacitor/app": "6.0.0",
     "@capacitor/core": "6.1.0",
     "@capacitor/haptics": "6.0.0",
@@ -23,7 +23,7 @@
     "@ionic/vue": "^8.2.5",
     "@ionic/vue-router": "^8.2.5",
     "ionicons": "^7.4.0",
-    "vue": "^3.4.32",
+    "vue": "^3.4.33",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {

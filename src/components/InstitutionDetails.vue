@@ -1,3 +1,25 @@
+<script lang="ts">
+import type { PropType } from 'vue'
+import { defineComponent, toRefs } from 'vue'
+import type { Institution } from '@/data/institutions'
+
+export default defineComponent({
+  props: {
+    institutionDetail: {
+      type: Object as PropType<Institution>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { institutionDetail } = toRefs(props)
+
+    return {
+      institutionDetail,
+    }
+  },
+})
+</script>
+
 <template>
   <ion-card>
     <ion-card-header>
@@ -11,24 +33,3 @@
     </ion-card-content>
   </ion-card>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType, toRefs } from 'vue';
-import { Institution } from '@/data/institutions';
-
-export default defineComponent({
-  props: {
-    institutionDetail: {
-      type: Object as PropType<Institution>,
-      required: true,
-    },
-  },
-  setup(props) {
-    const { institutionDetail } = toRefs(props);
-
-    return {
-      institutionDetail,
-    };
-  },
-});
-</script>

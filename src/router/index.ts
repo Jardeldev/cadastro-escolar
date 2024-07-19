@@ -5,9 +5,9 @@ import Login from '../views/Login.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import InstitutionManagement from '@/views/InstitutionManagement.vue'
 import SchoolManagement from '@/views/SchoolManagement.vue'
-import SeriesManagement from '@/views/SeriesManagement.vue';
-import TurmaManagement from '@/views/TurmaManagement.vue';
-import ClassManagement from '@/views/ClassManagement.vue';
+import SeriesManagement from '@/views/SeriesManagement.vue'
+import TurmaManagement from '@/views/TurmaManagement.vue'
+import ClassManagement from '@/views/ClassManagement.vue'
 import Institution from '@/views/Institution.vue'
 import School from '@/views/School.vue'
 
@@ -34,17 +34,17 @@ const routes = [
 
   {
     path: '/escolas',
-    component: SchoolManagement, 
+    component: SchoolManagement,
   },
 
   {
     path: '/escolas/lista',
-    component: School, 
+    component: School,
   },
 
   {
     path: '/series',
-    component: SeriesManagement, 
+    component: SeriesManagement,
   },
 
   {
@@ -61,7 +61,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
 })
 
 export default router
