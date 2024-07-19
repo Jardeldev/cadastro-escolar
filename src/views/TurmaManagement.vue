@@ -13,7 +13,7 @@ export default defineComponent({
     const turmas = ref(fetchTurmas())
     const selectedTurma = ref(null)
 
-    const viewTurmaDetails = (turma) => {
+    const viewTurmaDetails = (turma: null) => {
       selectedTurma.value = turma
     }
 
