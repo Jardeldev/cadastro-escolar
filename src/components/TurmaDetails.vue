@@ -1,3 +1,25 @@
+<script lang="ts">
+import type { PropType } from 'vue'
+import { defineComponent, toRefs } from 'vue'
+import type { Turma } from '@/data/turmas'
+
+export default defineComponent({
+  props: {
+    turmaDetail: {
+      type: Object as PropType<Turma>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { turmaDetail } = toRefs(props)
+
+    return {
+      turmaDetail,
+    }
+  },
+})
+</script>
+
 <template>
   <ion-card>
     <ion-card-header>
@@ -8,24 +30,3 @@
     </ion-card-content>
   </ion-card>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType, toRefs } from 'vue';
-import { Turma } from '@/data/turmas';
-
-export default defineComponent({
-  props: {
-    turmaDetail: {
-      type: Object as PropType<Turma>,
-      required: true,
-    },
-  },
-  setup(props) {
-    const { turmaDetail } = toRefs(props);
-
-    return {
-      turmaDetail,
-    };
-  },
-});
-</script>

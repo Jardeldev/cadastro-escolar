@@ -10,6 +10,9 @@ import TurmaManagement from '@/views/TurmaManagement.vue'
 import ClassManagement from '@/views/ClassManagement.vue'
 import Institution from '@/views/Institution.vue'
 import School from '@/views/School.vue'
+import Series from '@/views/Series.vue'
+import Turma from '@/views/Turma.vue'
+import Class from '@/views/Class.vue'
 
 const routes = [
   {
@@ -48,13 +51,28 @@ const routes = [
   },
 
   {
+    path: '/series/lista',
+    component: Series,
+  },
+
+  {
     path: '/classes',
     component: ClassManagement,
   },
 
   {
+    path: '/classes/lista',
+    component: Class,
+  },
+
+  {
     path: '/turmas',
     component: TurmaManagement,
+  },
+
+  {
+    path: '/turmas/lista',
+    component: Turma,
   },
 
 ]

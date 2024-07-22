@@ -1,7 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watchEffect } from 'vue'
 import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonSearchbar, IonTitle, IonToolbar } from '@ionic/vue'
-import { fetchInstitutions } from '@/utils/api'
 import InstitutionList from '@/components/InstitutionList.vue'
 import InstitutionDetails from '@/components/InstitutionDetails.vue'
 
@@ -25,23 +24,33 @@ export default defineComponent({
     InstitutionList,
     InstitutionDetails,
     IonSearchbar,
-
   },
   setup() {
-    const institutions = ref(fetchInstitutions())
-    const selectedInstitution = ref(null)
+    // Função para carregar as instituições do localStorage
+    const loadInstitutions = () => {
+      const storedData = localStorage.getItem('institutions')
+      return storedData ? JSON.parse(storedData) : []
+    }
+
+    const institutions = ref<Institution[]>(loadInstitutions())
+    const selectedInstitution = ref<Institution | null>(null)
     const isAddModalOpen = ref(false)
     const editMode = ref(false)
-    const institutionForm = ref<Institution>({ id: null, name: '', acronym: '', address: '', phone: '', email: '', description: '' })
+    const institutionForm = ref<Institution>({ id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '' })
 
-    const viewInstitutionDetails = (institution) => {
+    // Função para salvar as instituições no localStorage
+    const saveInstitutionsToLocalStorage = () => {
+      localStorage.setItem('institutions', JSON.stringify(institutions.value))
+    }
+
+    const viewInstitutionDetails = (institution: Institution) => {
       selectedInstitution.value = institution
     }
 
     const openAddModel = () => {
       isAddModalOpen.value = true
       editMode.value = false
-      institutionForm.value = { id: null, name: '', acronym: '', address: '', phone: '', email: '', description: '', valid: false }
+      institutionForm.value = { id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '' }
     }
 
     const openEditModel = (item: Institution) => {
@@ -61,9 +70,9 @@ export default defineComponent({
           institutions.value[index] = { ...institutionForm.value }
         }
         else {
-          const newInstitution: Institution = { ...institutionForm.value, id: Date.now() }
-          institutions.value.push(newInstitution)
+          institutions.value.push({ ...institutionForm.value, id: Date.now() })
         }
+        saveInstitutionsToLocalStorage()
         await new Promise(resolve => setTimeout(resolve, 500))
         addModalDismiss()
       }
@@ -76,12 +85,18 @@ export default defineComponent({
       try {
         const index = institutions.value.findIndex(i => i.id === item.id)
         institutions.value.splice(index, 1)
+        saveInstitutionsToLocalStorage()
         await new Promise(resolve => setTimeout(resolve, 500))
       }
       catch (error) {
         console.error('Error deleting institution:', error)
       }
     }
+
+    // Recarregar as instituições do localStorage sempre que o componente for montado
+    watchEffect(() => {
+      institutions.value = loadInstitutions()
+    })
 
     return {
       institutions,
@@ -95,7 +110,6 @@ export default defineComponent({
       addModalDismiss,
       saveInstitution,
       deleteInstitution,
-      institutionForm,
     }
   },
 })
@@ -169,7 +183,7 @@ export default defineComponent({
 }
 
 .form-container {
-    padding: 2.0em;
+  padding: 2.0em;
   width: 100%;
   max-width: 5000px;
   display: flex;

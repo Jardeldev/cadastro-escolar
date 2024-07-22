@@ -1,14 +1,13 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonSearchbar, IonTitle, IonToolbar } from '@ionic/vue'
-import { fetchInstitutions } from '@/utils/api'
-import InstitutionList from '@/components/InstitutionList.vue'
-import InstitutionDetails from '@/components/InstitutionDetails.vue'
+import { IonButton, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonModal, IonPage, IonSearchbar, IonTitle, IonToolbar } from '@ionic/vue'
+import { fetchSchools } from '@/utils/api'
+import SchoolList from '@/components/SchoolList.vue'
+import SchoolDetails from '@/components/SchoolDetails.vue'
 
-interface Institution {
+interface School {
   id: number
   name: string
-  acronym: string
   address: string
   phone: string
   email: string
@@ -22,80 +21,77 @@ export default defineComponent({
     IonToolbar,
     IonTitle,
     IonContent,
-    InstitutionList,
-    InstitutionDetails,
-    IonSearchbar,
-    IonToolbar,
-
+    SchoolList,
+    SchoolDetails,
   },
   setup() {
-    const institutions = ref(fetchInstitutions())
-    const selectedInstitution = ref(null)
+    const schools = ref(fetchSchools())
+    const selectedSchool = ref(null)
     const isAddModalOpen = ref(false)
     const editMode = ref(false)
-    const institutionForm = ref<Institution>({ id: null, name: '', acronym: '', address: '', phone: '', email: '', description: '', valid: false })
+    const schoolForm = ref<School>({ id: 0, name: '', address: '', phone: '', email: '', description: '' })
 
-    const viewInstitutionDetails = (institution) => {
-      selectedInstitution.value = institution
+    const viewSchoolDetails = (school) => {
+      selectedSchool.value = school
     }
 
     const openAddModel = () => {
       isAddModalOpen.value = true
       editMode.value = false
-      institutionForm.value = { id: null, name: '', acronym: '', address: '', phone: '', email: '', description: '', valid: false }
+      schoolForm.value = { id: 0, name: '', address: '', phone: '', email: '', description: '' }
     }
 
-    const openEditModel = (item: Institution) => {
+    const openEditModel = (item: School) => {
       isAddModalOpen.value = true
       editMode.value = true
-      institutionForm.value = { ...item }
+      schoolForm.value = { ...item }
     }
 
     const addModalDismiss = () => {
       isAddModalOpen.value = false
     }
 
-    const saveInstitution = async () => {
+    const saveSchool = async () => {
       try {
         if (editMode.value) {
-          const index = institutions.value.findIndex(i => i.id === institutionForm.value.id)
-          institutions.value[index] = { ...institutionForm.value }
+          const index = schools.value.findIndex(i => i.id === schoolForm.value.id)
+          schools.value[index] = { ...schoolForm.value }
         }
         else {
-          const newInstitution: Institution = { ...institutionForm.value, id: Date.now() }
-          institutions.value.push(newInstitution)
+          const newSchool: School = { ...schoolForm.value, id: Date.now() }
+          schools.value.push(newSchool)
         }
         await new Promise(resolve => setTimeout(resolve, 500))
         addModalDismiss()
       }
       catch (error) {
-        console.error('Error saving institution:', error)
+        console.error('Error saving school:', error)
       }
     }
 
-    const deleteInstitution = async (item: Institution) => {
+    const deleteSchool = async (item: School) => {
       try {
-        const index = institutions.value.findIndex(i => i.id === item.id)
-        institutions.value.splice(index, 1)
+        const index = schools.value.findIndex(i => i.id === item.id)
+        schools.value.splice(index, 1)
         await new Promise(resolve => setTimeout(resolve, 500))
       }
       catch (error) {
-        console.error('Error deleting institution:', error)
+        console.error('Error deleting school:', error)
       }
     }
 
     return {
-      institutions,
-      selectedInstitution,
-      viewInstitutionDetails,
+      schools,
+      selectedSchool,
+      viewSchoolDetails,
       isAddModalOpen,
       editMode,
-      institutionForm,
+      schoolForm,
       openAddModel,
       openEditModel,
       addModalDismiss,
-      saveInstitution,
-      deleteInstitution,
+      saveSchool,
+      deleteSchool,
     }
   },
 })
@@ -117,39 +113,33 @@ export default defineComponent({
               <ion-label position="fixed">
                 Nome *
               </ion-label>
-              <ion-input v-model="institutionForm.name" required />
-            </ion-item>
-            <ion-item class="form-item">
-              <ion-label position="fixed">
-                Sigla *
-              </ion-label>
-              <ion-input v-model="institutionForm.acronym" required />
+              <ion-input v-model="schoolForm.name" required />
             </ion-item>
             <ion-item class="form-item">
               <ion-label position="fixed">
                 Endereço *
               </ion-label>
-              <ion-input v-model="institutionForm.address" required />
+              <ion-input v-model="schoolForm.address" required />
             </ion-item>
             <ion-item class="form-item">
               <ion-label position="fixed">
                 Telefone *
               </ion-label>
-              <ion-input v-model="institutionForm.phone" required />
+              <ion-input v-model="schoolForm.phone" required />
             </ion-item>
             <ion-item class="form-item">
               <ion-label position="fixed">
                 E-mail *
               </ion-label>
-              <ion-input v-model="institutionForm.email" type="email" required />
+              <ion-input v-model="schoolForm.email" type="email" required />
             </ion-item>
             <ion-item class="form-item">
               <ion-label position="fixed">
                 Descrição
               </ion-label>
-              <ion-textarea v-model="institutionForm.description" />
+              <ion-textarea v-model="schoolForm.description" />
             </ion-item>
-            <ion-button expand="block" @click="saveInstitution">
+            <ion-button expand="block" @click="saveSchool">
               {{ editMode ? 'Salvar Alterações' : 'Adicionar' }}
             </ion-button>
           </div>
@@ -169,7 +159,7 @@ export default defineComponent({
 }
 
 .form-container {
-    padding: 2.0em;
+  padding: 2.0em;
   width: 100%;
   max-width: 5000px;
   display: flex;
@@ -180,28 +170,28 @@ export default defineComponent({
 .form-item {
   width: 100%;
   max-width: 400px;
-  margin: 5px 0; /* Diminuindo o espaçamento vertical */
+  margin: 5px 0;
 }
 
 ion-item.form-item {
-  --inner-padding-start: 8px; /* Ajustando o padding interno */
+  --inner-padding-start: 8px;
   --inner-padding-end: 8px;
-  --border-radius: 10px; /* Borda arredondada */
+  --border-radius: 10px;
   --padding-bottom: 8px;
   --padding-top: 8px;
 }
 
 ion-button {
-  margin-top: 15px; /* Diminuindo o espaçamento vertical */
+  margin-top: 15px;
   width: 100%;
   max-width: 400px;
-  --border-radius: 10px; /* Borda arredondada */
+  --border-radius: 10px;
 }
 
 .searchbar {
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
-  --border-radius: 10px; /* Borda arredondada */
+  --border-radius: 10px;
 }
 </style>

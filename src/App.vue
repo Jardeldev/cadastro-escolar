@@ -24,7 +24,7 @@ function goToRoute(route: string) {
               <ion-label>Dashboard</ion-label>
             </ion-item>
             <div slot="content" class="ion-padding">
-              <ion-button expand="block" href="/dashboard">
+              <ion-button expand="block" @click="goToRoute('/dashboard')">
                 Visão Geral
               </ion-button>
             </div>
@@ -37,7 +37,7 @@ function goToRoute(route: string) {
               <ion-button expand="block" @click="goToRoute('/instituicoes/lista')">
                 Lista de Instituições
               </ion-button>
-              <ion-button expand="block">
+              <ion-button expand="block" @click="goToRoute('/instituicoes')">
                 Adicionar Instituição
               </ion-button>
             </div>
@@ -47,10 +47,10 @@ function goToRoute(route: string) {
               <ion-label>Gestão de Escolas</ion-label>
             </ion-item>
             <div slot="content" class="ion-padding">
-              <ion-button expand="block">
+              <ion-button expand="block" @click="goToRoute('/escolas/lista')">
                 Lista de Escolas
               </ion-button>
-              <ion-button expand="block">
+              <ion-button expand="block" @click="goToRoute('/escolas')">
                 Adicionar Escola
               </ion-button>
             </div>
@@ -60,10 +60,10 @@ function goToRoute(route: string) {
               <ion-label>Gestão de Séries</ion-label>
             </ion-item>
             <div slot="content" class="ion-padding">
-              <ion-button expand="block">
+              <ion-button expand="block" @click="goToRoute('/series/lista')">
                 Lista de Séries
               </ion-button>
-              <ion-button expand="block">
+              <ion-button expand="block" @click="goToRoute('/series')">
                 Adicionar Séries
               </ion-button>
             </div>
@@ -73,10 +73,10 @@ function goToRoute(route: string) {
               <ion-label>Gestão de Classes</ion-label>
             </ion-item>
             <div slot="content" class="ion-padding">
-              <ion-button expand="block">
+              <ion-button expand="block" @click="goToRoute('/classes/lista')">
                 Lista de Classes
               </ion-button>
-              <ion-button expand="block">
+              <ion-button expand="block" @click="goToRoute('/classes')">
                 Adicionar Classe
               </ion-button>
             </div>
@@ -86,10 +86,10 @@ function goToRoute(route: string) {
               <ion-label>Gestão de Turmas</ion-label>
             </ion-item>
             <div slot="content" class="ion-padding">
-              <ion-button expand="block">
+              <ion-button expand="block" @click="goToRoute('/turmas/lista')">
                 Lista de Turmas
               </ion-button>
-              <ion-button expand="block">
+              <ion-button expand="block" @click="goToRoute('/turmas')">
                 Adicionar Turma
               </ion-button>
             </div>
