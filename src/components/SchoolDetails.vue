@@ -1,35 +1,92 @@
-<script lang="ts">
-import type { PropType } from 'vue'
-import { defineComponent, toRefs } from 'vue'
-import type { School } from '@/data/schools'
+<script setup lang="ts">
+import { defineProps } from 'vue'
 
-export default defineComponent({
-  props: {
-    schoolDetail: {
-      type: Object as PropType<School>,
-      required: true,
-    },
-  },
-  setup(props) {
-    const { schoolDetail } = toRefs(props)
+interface School {
+  id: number
+  name: string
+  address: string
+  phone: string
+  email: string
+  description: string
+}
 
-    return {
-      schoolDetail,
-    }
-  },
-})
+interface Institution {
+  id: number
+  name: string
+  // Add other properties as needed
+}
+
+interface Series {
+  id: number
+  name: string
+  // Add other properties as needed
+}
+
+interface Turmas {
+  id: number
+  name: string
+  // Add other properties as needed
+}
+
+interface Classes {
+  id: number
+  name: string
+  // Add other properties as needed
+}
+
+defineProps<{
+  schoolDetail: School
+  institution: Institution | null
+  series: Series[]
+  turmas: Turmas[]
+  classes: Classes[]
+}>()
 </script>
 
 <template>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{ schoolDetail.name }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>{{ schoolDetail.description }}</p>
-      <p><strong>Endereço:</strong> {{ schoolDetail.address }}</p>
-      <p><strong>Telefone:</strong> {{ schoolDetail.phone }}</p>
-      <p><strong>Email:</strong> {{ schoolDetail.email }}</p>
-    </ion-card-content>
-  </ion-card>
+  <div v-if="schoolDetail">
+    <h2>Detalhes da Escola</h2>
+    <p><strong>Nome:</strong> {{ schoolDetail.name }}</p>
+    <p><strong>Endereço:</strong> {{ schoolDetail.address }}</p>
+    <p><strong>Telefone:</strong> {{ schoolDetail.phone }}</p>
+    <p><strong>E-mail:</strong> {{ schoolDetail.email }}</p>
+    <p><strong>Descrição:</strong> {{ schoolDetail.description }}</p>
+
+    <!-- Display institution details -->
+    <div v-if="institution">
+      <h3>Instituição</h3>
+      <p><strong>Nome:</strong> {{ institution.name }}</p>
+      <!-- Add other institution details as needed -->
+    </div>
+
+    <!-- Display series -->
+    <div v-if="series.length">
+      <h3>Séries</h3>
+      <ul>
+        <li v-for="serie in series" :key="serie.id">
+          {{ serie.name }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Display turmas -->
+    <div v-if="turmas.length">
+      <h3>Turmas</h3>
+      <ul>
+        <li v-for="turma in turmas" :key="turma.id">
+          {{ turma.name }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Display classes -->
+    <div v-if="classes.length">
+      <h3>Classes</h3>
+      <ul>
+        <li v-for="classe in classes" :key="classe.id">
+          {{ classe.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>

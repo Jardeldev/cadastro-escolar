@@ -68,19 +68,6 @@ function goToRoute(route: string) {
               </ion-button>
             </div>
           </ion-accordion>
-          <ion-accordion class="accordion" value="fifth">
-            <ion-item slot="header" color="light">
-              <ion-label>Gestão de Classes</ion-label>
-            </ion-item>
-            <div slot="content" class="ion-padding">
-              <ion-button expand="block" @click="goToRoute('/classes/lista')">
-                Lista de Classes
-              </ion-button>
-              <ion-button expand="block" @click="goToRoute('/classes')">
-                Adicionar Classe
-              </ion-button>
-            </div>
-          </ion-accordion>
           <ion-accordion class="accordion" value="sixth">
             <ion-item slot="header" color="light">
               <ion-label>Gestão de Turmas</ion-label>

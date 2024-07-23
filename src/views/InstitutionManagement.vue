@@ -1,10 +1,8 @@
 <script lang="ts">
-import { defineComponent, ref, watchEffect } from 'vue'
-import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonSearchbar, IonTitle, IonToolbar } from '@ionic/vue'
-import InstitutionList from '@/components/InstitutionList.vue'
-import InstitutionDetails from '@/components/InstitutionDetails.vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
+import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/vue'
 
-interface Institution {
+export interface Institution {
   id: number
   name: string
   acronym: string
@@ -12,6 +10,12 @@ interface Institution {
   phone: string
   email: string
   description: string
+  schools: string
+  series: string
+  turmas: string
+  teachers: string
+  schedule: string
+  discipline: string
 }
 
 export default defineComponent({
@@ -21,36 +25,31 @@ export default defineComponent({
     IonToolbar,
     IonTitle,
     IonContent,
-    InstitutionList,
-    InstitutionDetails,
-    IonSearchbar,
+    IonButton,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonTextarea,
   },
   setup() {
-    // Função para carregar as instituições do localStorage
-    const loadInstitutions = () => {
-      const storedData = localStorage.getItem('institutions')
-      return storedData ? JSON.parse(storedData) : []
+    const loadFromLocalStorage = (): Institution[] => {
+      const data = localStorage.getItem('institutions')
+      return data ? JSON.parse(data) : []
     }
 
-    const institutions = ref<Institution[]>(loadInstitutions())
-    const selectedInstitution = ref<Institution | null>(null)
+    const saveToLocalStorage = (data: Institution[]) => {
+      localStorage.setItem('institutions', JSON.stringify(data))
+    }
+
+    const institutions = ref<Institution[]>(loadFromLocalStorage())
     const isAddModalOpen = ref(false)
     const editMode = ref(false)
-    const institutionForm = ref<Institution>({ id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '' })
-
-    // Função para salvar as instituições no localStorage
-    const saveInstitutionsToLocalStorage = () => {
-      localStorage.setItem('institutions', JSON.stringify(institutions.value))
-    }
-
-    const viewInstitutionDetails = (institution: Institution) => {
-      selectedInstitution.value = institution
-    }
+    const institutionForm = ref<Institution>({ id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' })
 
     const openAddModel = () => {
       isAddModalOpen.value = true
       editMode.value = false
-      institutionForm.value = { id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '' }
+      institutionForm.value = { id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' }
     }
 
     const openEditModel = (item: Institution) => {
@@ -59,22 +58,19 @@ export default defineComponent({
       institutionForm.value = { ...item }
     }
 
-    const addModalDismiss = () => {
-      isAddModalOpen.value = false
-    }
-
     const saveInstitution = async () => {
       try {
         if (editMode.value) {
           const index = institutions.value.findIndex(i => i.id === institutionForm.value.id)
-          institutions.value[index] = { ...institutionForm.value }
+          if (index !== -1) {
+            institutions.value[index] = { ...institutionForm.value }
+          }
         }
         else {
           institutions.value.push({ ...institutionForm.value, id: Date.now() })
         }
-        saveInstitutionsToLocalStorage()
-        await new Promise(resolve => setTimeout(resolve, 500))
-        addModalDismiss()
+        saveToLocalStorage(institutions.value)
+        isAddModalOpen.value = false
       }
       catch (error) {
         console.error('Error saving institution:', error)
@@ -84,30 +80,37 @@ export default defineComponent({
     const deleteInstitution = async (item: Institution) => {
       try {
         const index = institutions.value.findIndex(i => i.id === item.id)
-        institutions.value.splice(index, 1)
-        saveInstitutionsToLocalStorage()
-        await new Promise(resolve => setTimeout(resolve, 500))
+        if (index !== -1) {
+          institutions.value.splice(index, 1)
+          saveToLocalStorage(institutions.value)
+        }
       }
       catch (error) {
         console.error('Error deleting institution:', error)
       }
     }
 
-    // Recarregar as instituições do localStorage sempre que o componente for montado
-    watchEffect(() => {
-      institutions.value = loadInstitutions()
+    onMounted(() => {
+      institutions.value = loadFromLocalStorage()
     })
+
+    watch(
+      () => localStorage.getItem('institutions'),
+      (newVal, oldVal) => {
+        if (newVal !== oldVal) {
+          institutions.value = loadFromLocalStorage()
+        }
+      },
+      { deep: true },
+    )
 
     return {
       institutions,
-      selectedInstitution,
-      viewInstitutionDetails,
       isAddModalOpen,
       editMode,
       institutionForm,
       openAddModel,
       openEditModel,
-      addModalDismiss,
       saveInstitution,
       deleteInstitution,
     }
@@ -162,6 +165,42 @@ export default defineComponent({
                 Descrição
               </ion-label>
               <ion-textarea v-model="institutionForm.description" />
+            </ion-item>
+            <ion-item class="form-item">
+              <ion-label position="fixed">
+                Nome da Escola
+              </ion-label>
+              <ion-input v-model="institutionForm.schools" placeholder="Adicionar escolas separadas por vírgula" />
+            </ion-item>
+            <ion-item class="form-item">
+              <ion-label position="fixed">
+                Séries
+              </ion-label>
+              <ion-input v-model="institutionForm.series" placeholder="Adicionar séries separadas por vírgula" />
+            </ion-item>
+            <ion-item class="form-item">
+              <ion-label position="fixed">
+                Turmas
+              </ion-label>
+              <ion-input v-model="institutionForm.turmas" placeholder="Adicionar turmas separadas por vírgula" />
+            </ion-item>
+            <ion-item class="form-item">
+              <ion-label position="fixed">
+                Professores
+              </ion-label>
+              <ion-input v-model="institutionForm.teachers" placeholder="Adicionar escolas separadas por vírgula" />
+            </ion-item>
+            <ion-item class="form-item">
+              <ion-label position="fixed">
+                Horários
+              </ion-label>
+              <ion-input v-model="institutionForm.schedule" placeholder="Adicionar escolas separadas por vírgula" />
+            </ion-item>
+            <ion-item class="form-item">
+              <ion-label position="fixed">
+                Disciplinas
+              </ion-label>
+              <ion-input v-model="institutionForm.discipline" placeholder="Adicionar escolas separadas por vírgula" />
             </ion-item>
             <ion-button expand="block" @click="saveInstitution">
               {{ editMode ? 'Salvar Alterações' : 'Adicionar' }}

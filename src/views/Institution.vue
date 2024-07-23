@@ -10,6 +10,12 @@ export interface Institution {
   phone: string
   email: string
   description: string
+  schools: string
+  series: string
+  turmas: string
+  teachers: string
+  schedule: string
+  discipline: string
 }
 
 export default defineComponent({
@@ -41,12 +47,12 @@ export default defineComponent({
     const institutions = ref<Institution[]>(loadFromLocalStorage())
     const isAddModalOpen = ref(false)
     const editMode = ref(false)
-    const institutionForm = ref<Institution>({ id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '' })
+    const institutionForm = ref<Institution>({ id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', schools: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' })
 
     const openAddModel = () => {
       isAddModalOpen.value = true
-      editModel.value = false
-      institutionForm.value = { id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '' }
+      editMode.value = false
+      institutionForm.value = { id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', schools: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' }
     }
 
     const openEditModel = (item: Institution) => {
@@ -65,7 +71,7 @@ export default defineComponent({
           institutions.value.push({ ...institutionForm.value })
         }
         saveToLocalStorage(institutions.value)
-        isAddModalOpen.value = false //
+        isAddModalOpen.value = false
       }
       catch (error) {
         console.error('Error saving institution:', error)
@@ -104,16 +110,17 @@ export default defineComponent({
 
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Gestão de Instituições</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <ion-header />
     <ion-content>
       <div class="form-container">
         <ion-list>
+          <ion-toolbar>
+            <ion-title class="title">
+              Gestão de Instituições
+            </ion-title>
+          </ion-toolbar>
           <ion-item v-for="item in institutions" :key="item.id">
-            <ion-label>{{ item.name }}</ion-label>
+            <ion-label>Nome da Instituição: {{ item.name }}</ion-label>
             <ion-button slot="end" @click="openEditModel(item)">
               <ion-icon name="pencil-outline" />
               Editar
@@ -124,14 +131,10 @@ export default defineComponent({
             </ion-button>
           </ion-item>
         </ion-list>
-        <ion-button expand="block" @click="openAddModel">
-          <ion-icon slot="start" name="add-outline" />
-          Adicionar Instituição
-        </ion-button>
         <div v-if="isAddModalOpen" class="form-container">
           <ion-item class="form-item">
             <ion-label position="fixed">
-              Nome *
+              Nome da Instituição *
             </ion-label>
             <ion-input v-model="institutionForm.name" required />
           </ion-item>
@@ -165,6 +168,42 @@ export default defineComponent({
             </ion-label>
             <ion-textarea v-model="institutionForm.description" />
           </ion-item>
+          <ion-item class="form-item">
+            <ion-label position="fixed">
+              Nome da Escola
+            </ion-label>
+            <ion-input v-model="institutionForm.schools" placeholder="Adicionar escolas separadas por vírgula" />
+          </ion-item>
+          <ion-item class="form-item">
+            <ion-label position="fixed">
+              Série
+            </ion-label>
+            <ion-input v-model="institutionForm.series" placeholder="Adicionar escolas separadas por vírgula" />
+          </ion-item>
+          <ion-item class="form-item">
+            <ion-label position="fixed">
+              Turma
+            </ion-label>
+            <ion-input v-model="institutionForm.turmas" placeholder="Adicionar escolas separadas por vírgula" />
+          </ion-item>
+          <ion-item class="form-item">
+            <ion-label position="fixed">
+              Professores
+            </ion-label>
+            <ion-input v-model="institutionForm.teachers" placeholder="Adicionar escolas separadas por vírgula" />
+          </ion-item>
+          <ion-item class="form-item">
+            <ion-label position="fixed">
+              Horários
+            </ion-label>
+            <ion-input v-model="institutionForm.schedule" placeholder="Adicionar escolas separadas por vírgula" />
+          </ion-item>
+          <ion-item class="form-item">
+            <ion-label position="fixed">
+              Disciplinas
+            </ion-label>
+            <ion-input v-model="institutionForm.discipline" placeholder="Adicionar escolas separadas por vírgula" />
+          </ion-item>
           <ion-button expand="block" @click="saveInstitution">
             {{ editMode ? 'Salvar Alterações' : 'Adicionar' }}
           </ion-button>
@@ -175,16 +214,20 @@ export default defineComponent({
 </template>
 
 <style scoped>
+.title {
+  text-align: center;
+}
+
 .form-container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    margin-top: 50px;
-    margin-bottom: 50px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  margin-top: 50px;
+  margin-bottom: 50px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 </style>

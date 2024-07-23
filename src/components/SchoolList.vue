@@ -24,7 +24,7 @@ export default defineComponent({
   <ion-list>
     <ion-item v-for="school in schools" :key="school.id">
       <ion-label>{{ school.name }}</ion-label>
-      <ion-button slot="end" @click="$emit('view-details', school)">
+      <ion-button slot="end" @click="$emit('viewDetauks', school)">
         Detalhes
       </ion-button>
     </ion-item>
