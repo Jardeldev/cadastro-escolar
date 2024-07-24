@@ -1,7 +1,8 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { IonAccordion, IonAccordionGroup, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/vue'
-
+import InstitutionList from '@/components/InstitutionList.vue'
+// Interface que define a estrutura de uma instituição
 export interface Institution {
   id: number
   name: string
@@ -20,24 +21,21 @@ export default defineComponent({
     IonPage,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonButton,
-    IonIcon,
     IonList,
     IonItem,
     IonLabel,
     IonInput,
-    IonTextarea,
-    IonAccordion,
-    IonAccordionGroup,
+    InstitutionList,
   },
   setup() {
+    // Função para carregar dados do localStorage
     const loadFromLocalStorage = (): Institution[] => {
       const data = localStorage.getItem('institutions')
       return data ? JSON.parse(data) : []
     }
-
+    // Função para salvar dados no localStorage
     const saveToLocalStorage = (data: Institution[]) => {
       localStorage.setItem('institutions', JSON.stringify(data))
     }
@@ -47,21 +45,21 @@ export default defineComponent({
     const isAddModalOpen = ref(false)
     const editMode = ref(false)
     const institutionForm = ref<{ name: string, series: string, turmas: string }>({ name: '', series: '', turmas: '' })
-
+    // Função para abrir o modal de adição
     const openAddModel = () => {
       isAddModalOpen.value = true
       editMode.value = false
       institutionForm.value = { name: '', series: '', turmas: '' }
       selectedInstitution.value = null
     }
-
+    // Função para abrir o modal de edição
     const openEditModel = (item: Institution) => {
       selectedInstitution.value = item
       institutionForm.value = { name: item.schools, series: item.series, turmas: item.turmas }
       isAddModalOpen.value = true
       editMode.value = true
     }
-
+    // Função para salvar uma instituição (adicionar ou editar)
     const saveInstitution = async () => {
       if (!selectedInstitution.value)
         return
@@ -83,7 +81,7 @@ export default defineComponent({
         console.error('Error saving institution:', error)
       }
     }
-
+    // Função para excluir uma instituição
     const deleteInstitution = async (item: Institution) => {
       try {
         const index = institutions.value.findIndex(i => i.id === item.id)
@@ -96,11 +94,11 @@ export default defineComponent({
         console.error('Error deleting institution:', error)
       }
     }
-
+    // Carrega os dados do localStorage quando o componente é montado
     onMounted(() => {
       institutions.value = loadFromLocalStorage()
     })
-
+    // Assiste mudanças no localStorage e atualiza as instituições se necessário
     watch(
       () => localStorage.getItem('institutions'),
       (newVal, oldVal) => {
@@ -132,20 +130,11 @@ export default defineComponent({
       <ion-toolbar />
     </ion-header>
     <ion-content>
-      <ion-accordion-group>
-        <ion-accordion value="institutionsAccordion" class="accordion-item">
-          <ion-item slot="header" color="light">
-            <ion-label>Instituições Cadastradas</ion-label>
-          </ion-item>
-          <div slot="content">
-            <ion-list>
-              <ion-item v-for="institution in institutions" :key="institution.id" @click="openEditModel(institution)">
-                <ion-label>{{ institution.name }}</ion-label>
-              </ion-item>
-            </ion-list>
-          </div>
-        </ion-accordion>
-      </ion-accordion-group>
+      <institution-list
+        :institutions="institutions"
+        @edit-institution="openEditModel"
+        @delete-institution="deleteInstitution"
+      />
 
       <ion-modal :is-open="isAddModalOpen" css-class="my-custom-modal">
         <ion-content class="modal-content">

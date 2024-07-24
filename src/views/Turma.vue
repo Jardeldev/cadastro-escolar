@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/vue'
+import { pencilOutline } from 'ionicons/icons'
 
 export interface Institution {
   id: number
@@ -31,9 +32,11 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonInput,
-    IonTextarea,
   },
   setup() {
+    const icons = {
+      pencilOutline,
+    }
     // Funções para manipular o localStorage
     const saveToLocalStorage = (data: Institution[]) => {
       localStorage.setItem('institutions', JSON.stringify(data))
@@ -95,6 +98,7 @@ export default defineComponent({
     })
 
     return {
+      icons,
       institutions,
       isAddModalOpen,
       editMode,
@@ -122,7 +126,7 @@ export default defineComponent({
           <ion-item v-for="item in institutions" :key="item.id">
             <ion-label>Nome da Instituição: {{ item.name }} | Escola: {{ item.schools }} | Séries: {{ item.series }} | Turmas: {{ item.turmas }}</ion-label>
             <ion-button slot="end" @click="openEditModel(item)">
-              <ion-icon name="pencil-outline" />
+              <ion-icon :icon="icons.pencilOutline" />
               Editar
             </ion-button>
           </ion-item>

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { IonAccordion, IonAccordionGroup, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/vue'
+import TurmaList from '@/components/TurmaList.vue'
 
 export interface Institution {
   id: number
@@ -22,18 +23,14 @@ export default defineComponent({
   components: {
     IonPage,
     IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
     IonButton,
-    IonIcon,
     IonList,
     IonItem,
     IonLabel,
     IonInput,
-    IonTextarea,
-    IonAccordion,
-    IonAccordionGroup,
+    IonToolbar,
+    TurmaList,
   },
   setup() {
     const loadFromLocalStorage = (): Institution[] => {
@@ -49,18 +46,18 @@ export default defineComponent({
     const selectedInstitution = ref<Institution | null>(null)
     const isAddModalOpen = ref(false)
     const editMode = ref(false)
-    const institutionForm = ref<{ name: string, series: string, turmas: string }>({ name: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' })
+    const institutionForm = ref<{ name: string, series: string, turmas: string, teachers: string, schedule: string, discipline: string }>({ name: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' })
 
     const openAddModel = () => {
       isAddModalOpen.value = true
       editMode.value = false
-      institutionForm.value = { name: '', series: '', turmas: '' }
+      institutionForm.value = { name: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' }
       selectedInstitution.value = null
     }
 
     const openEditModel = (item: Institution) => {
       selectedInstitution.value = item
-      institutionForm.value = { name: item.schools, series: item.series, turmas: item.turmas }
+      institutionForm.value = { name: item.schools, series: item.series, turmas: item.turmas, teachers: item.teachers, schedule: item.schedule, discipline: item.discipline }
       isAddModalOpen.value = true
       editMode.value = true
     }
@@ -132,21 +129,13 @@ export default defineComponent({
 <template>
   <ion-page>
     <ion-header />
+    <ion-toolbar />
     <ion-content>
-      <ion-accordion-group>
-        <ion-accordion value="institutionsAccordion" class="accordion-item">
-          <ion-item slot="header" color="light">
-            <ion-label>Detalhes da Turma</ion-label>
-          </ion-item>
-          <div slot="content">
-            <ion-list>
-              <ion-item v-for="institution in institutions" :key="institution.id" @click="openEditModel(institution)">
-                <ion-label>Escola: {{ institution.schools }}</ion-label>
-              </ion-item>
-            </ion-list>
-          </div>
-        </ion-accordion>
-      </ion-accordion-group>
+      <turma-list
+        :institutions="institutions"
+        @edit-institution="openEditModel"
+        @delete-institution="deleteInstitution"
+      />
 
       <ion-modal :is-open="isAddModalOpen" css-class="my-custom-modal">
         <ion-content class="modal-content">

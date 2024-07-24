@@ -1,7 +1,8 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/vue'
-
+import { pencilOutline, trashOutline } from 'ionicons/icons'
+// Interface para representar uma instituição
 export interface Institution {
   id: number
   name: string
@@ -34,33 +35,37 @@ export default defineComponent({
     IonTextarea,
   },
   setup() {
-    // Funções para manipular o localStorage
+    const icons = {
+      pencilOutline,
+      trashOutline,
+    }
+    // Função para carregar dados do localStorage
     const saveToLocalStorage = (data: Institution[]) => {
       localStorage.setItem('institutions', JSON.stringify(data))
     }
-
+    // Função para salvar dados no localStorage
     const loadFromLocalStorage = (): Institution[] => {
       const data = localStorage.getItem('institutions')
       return data ? JSON.parse(data) : []
     }
-
+    // Referências para gerenciar o estado da aplicação
     const institutions = ref<Institution[]>(loadFromLocalStorage())
     const isAddModalOpen = ref(false)
     const editMode = ref(false)
     const institutionForm = ref<Institution>({ id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', schools: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' })
-
+    // Abre o modal para adicionar uma nova instituição
     const openAddModel = () => {
       isAddModalOpen.value = true
       editMode.value = false
       institutionForm.value = { id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', schools: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' }
     }
-
+    // Abre o modal para editar uma instituição existente
     const openEditModel = (item: Institution) => {
       isAddModalOpen.value = true
       editMode.value = true
       institutionForm.value = { ...item }
     }
-
+    // Salva ou atualiza uma instituição
     const saveInstitution = async () => {
       try {
         if (editMode.value) {
@@ -77,7 +82,7 @@ export default defineComponent({
         console.error('Error saving institution:', error)
       }
     }
-
+    // Deleta uma instituição
     const deleteInstitution = async (item: Institution) => {
       try {
         const index = institutions.value.findIndex(i => i.id === item.id)
@@ -95,6 +100,7 @@ export default defineComponent({
     })
 
     return {
+      icons,
       institutions,
       isAddModalOpen,
       editMode,
@@ -122,11 +128,11 @@ export default defineComponent({
           <ion-item v-for="item in institutions" :key="item.id">
             <ion-label>Nome da Instituição: {{ item.name }}</ion-label>
             <ion-button slot="end" @click="openEditModel(item)">
-              <ion-icon name="pencil-outline" />
+              <ion-icon :icon="icons.pencilOutline" />
               Editar
             </ion-button>
             <ion-button slot="end" @click="deleteInstitution(item)">
-              <ion-icon name="trash-outline" />
+              <ion-icon :icon="icons.trashOutline" />
               Excluir
             </ion-button>
           </ion-item>

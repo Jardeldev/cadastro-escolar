@@ -2,6 +2,7 @@
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/vue'
 
+// Interface que define a estrutura de uma instituição
 export interface Institution {
   id: number
   name: string
@@ -32,32 +33,36 @@ export default defineComponent({
     IonTextarea,
   },
   setup() {
+    // Função para carregar dados do localStorage
     const loadFromLocalStorage = (): Institution[] => {
       const data = localStorage.getItem('institutions')
       return data ? JSON.parse(data) : []
     }
-
+    // Função para salvar dados no localStorage
     const saveToLocalStorage = (data: Institution[]) => {
       localStorage.setItem('institutions', JSON.stringify(data))
     }
-
+    // Referências para gerenciar o estado da aplicação
     const institutions = ref<Institution[]>(loadFromLocalStorage())
     const isAddModalOpen = ref(false)
     const editMode = ref(false)
-    const institutionForm = ref<Institution>({ id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' })
+    const institutionForm = ref<Institution>({ id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', schools: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' })
 
+    // Abre o modal para adicionar uma nova instituição
     const openAddModel = () => {
       isAddModalOpen.value = true
       editMode.value = false
-      institutionForm.value = { id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' }
+      institutionForm.value = { id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '', schools: '' }
     }
 
+    // Abre o modal para editar uma instituição existente
     const openEditModel = (item: Institution) => {
       isAddModalOpen.value = true
       editMode.value = true
       institutionForm.value = { ...item }
     }
 
+    // Salva ou atualiza uma instituição
     const saveInstitution = async () => {
       try {
         if (editMode.value) {
@@ -77,6 +82,7 @@ export default defineComponent({
       }
     }
 
+    // Deleta uma instituição
     const deleteInstitution = async (item: Institution) => {
       try {
         const index = institutions.value.findIndex(i => i.id === item.id)
@@ -90,10 +96,12 @@ export default defineComponent({
       }
     }
 
+    // Carrega as instituições ao montar o componente
     onMounted(() => {
       institutions.value = loadFromLocalStorage()
     })
 
+    // Observa mudanças no localStorage e atualiza a lista de instituições
     watch(
       () => localStorage.getItem('institutions'),
       (newVal, oldVal) => {
@@ -188,19 +196,19 @@ export default defineComponent({
               <ion-label position="fixed">
                 Professores
               </ion-label>
-              <ion-input v-model="institutionForm.teachers" placeholder="Adicionar escolas separadas por vírgula" />
+              <ion-input v-model="institutionForm.teachers" placeholder="Adicionar professores separadas por vírgula" />
             </ion-item>
             <ion-item class="form-item">
               <ion-label position="fixed">
                 Horários
               </ion-label>
-              <ion-input v-model="institutionForm.schedule" placeholder="Adicionar escolas separadas por vírgula" />
+              <ion-input v-model="institutionForm.schedule" placeholder="Adicionar horários separadas por vírgula" />
             </ion-item>
             <ion-item class="form-item">
               <ion-label position="fixed">
                 Disciplinas
               </ion-label>
-              <ion-input v-model="institutionForm.discipline" placeholder="Adicionar escolas separadas por vírgula" />
+              <ion-input v-model="institutionForm.discipline" placeholder="Adicionar disciplinas separadas por vírgula" />
             </ion-item>
             <ion-button expand="block" @click="saveInstitution">
               {{ editMode ? 'Salvar Alterações' : 'Adicionar' }}

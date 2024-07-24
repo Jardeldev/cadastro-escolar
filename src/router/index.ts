@@ -12,10 +12,14 @@ import School from '@/views/School.vue'
 import Series from '@/views/Series.vue'
 import Turma from '@/views/Turma.vue'
 
-
 const routes = [
   {
     path: '/',
+    component: Login,
+  },
+
+  {
+    path: '/login',
     component: Login,
   },
 

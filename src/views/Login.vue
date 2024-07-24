@@ -1,60 +1,66 @@
-<template>
- <ion-page>
-    <ion-header>
-        <ion-toolbar>
-            <ion-title>Login</ion-title>
-        </ion-toolbar>
-    </ion-header>
-    <ion-content>
-        <form class="form" @submit.prevent="onLoginSubmit">
-            <ion-item class="form-username">
-                <ion-label position="stacked">Username</ion-label>
-                <ion-input type="text" v-model="username"></ion-input>
-            </ion-item>
-            <ion-item class="form-password">
-                <ion-label position="stacked">Password</ion-label>
-                <ion-input type="password" v-model="password"></ion-input>
-            </ion-item>
-            <ion-button class="form-button" @click="login" type="submit" expand="block">Login</ion-button>
-        </form>
-        <ion-alert :is-open="showAlert" :message="alertMessage" :buttons="alertButtons"></ion-alert>
-    </ion-content>
- </ion-page>
-</template>
-
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton } from '@ionic/vue';
+import { defineComponent } from 'vue'
+import { IonButton, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/vue'
 
 export default defineComponent({
-    components: {
-        IonPage,
-        IonHeader,
-        IonToolbar,
-        IonTitle,
-        IonContent,
-        IonItem,
-        IonLabel,
-        IonInput,
-        IonButton,
-    },
-    data() {
-        return {
-            username: '',
-            password: '',
-            showAlert: false,
-            alertMessage: '',
-            alertButtons: ['OK']
-        };
-    },
+  components: {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonButton,
+  },
+  data() {
+    return {
+      username: '',
+      password: '',
+      showAlert: false,
+      alertMessage: '',
+      alertButtons: ['OK'],
+    }
+  },
 
-    methods: {
+  methods: {
     login() {
       // Lógica de autenticação
     },
   },
-});
+})
 </script>
+
+<template>
+  <ion-page>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Login</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <form class="form" @submit.prevent="login">
+        <ion-item class="form-username">
+          <ion-label position="stacked">
+            Username
+          </ion-label>
+          <ion-input v-model="username" type="text" />
+        </ion-item>
+        <ion-item class="form-password">
+          <ion-label position="stacked">
+            Password
+          </ion-label>
+          <ion-input v-model="password" type="password" />
+        </ion-item>
+        <ion-button class="form-button" type="submit" expand="block" @click="login">
+          Login
+        </ion-button>
+      </form>
+      <ion-alert :is-open="showAlert" :message="alertMessage" :buttons="alertButtons" />
+    </ion-content>
+  </ion-page>
+</template>
 
 <style scoped>
     /* CSS para estilizar o formulário e botão */
@@ -74,5 +80,4 @@ export default defineComponent({
     padding: 20px;
     border-radius: 10px;
    }
-
 </style>

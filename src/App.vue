@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonAccordion, IonAccordionGroup, IonApp, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonMenu, IonMenuButton, IonPage, IonRouterOutlet, IonTitle, IonToolbar } from '@ionic/vue'
+import { IonAccordion, IonAccordionGroup, IonApp, IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonMenu, IonMenuButton, IonPage, IonRouterOutlet, IonSearchbar, IonTitle, IonToolbar } from '@ionic/vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -13,7 +13,7 @@ function goToRoute(route: string) {
   <ion-app>
     <ion-menu content-id="main-content">
       <ion-header>
-        <ion-toolbar color="tertiary">
+        <ion-toolbar>
           <ion-title>Sistema Escolar</ion-title>
         </ion-toolbar>
       </ion-header>
@@ -51,7 +51,7 @@ function goToRoute(route: string) {
                 Lista de Escolas
               </ion-button>
               <ion-button expand="block" @click="goToRoute('/escolas')">
-                Adicionar Escola
+                Detalhes
               </ion-button>
             </div>
           </ion-accordion>
@@ -64,7 +64,7 @@ function goToRoute(route: string) {
                 Lista de Séries
               </ion-button>
               <ion-button expand="block" @click="goToRoute('/series')">
-                Adicionar Séries
+                Detalhes
               </ion-button>
             </div>
           </ion-accordion>
@@ -77,7 +77,7 @@ function goToRoute(route: string) {
                 Lista de Turmas
               </ion-button>
               <ion-button expand="block" @click="goToRoute('/turmas')">
-                Adicionar Turma
+                Detalhes
               </ion-button>
             </div>
           </ion-accordion>
@@ -90,7 +90,7 @@ function goToRoute(route: string) {
           <ion-buttons slot="start">
             <ion-menu-button />
           </ion-buttons>
-          <ion-title>Menu</ion-title>
+          <ion-searchbar class="searchbar" placeholder="Pesquisar..." />
         </ion-toolbar>
       </ion-header>
       <ion-router-outlet />
@@ -101,5 +101,32 @@ function goToRoute(route: string) {
 <style scoped>
 .accordion {
   margin-bottom: 5px;
+}
+
+.searchbar {
+  flex: 1;
+  margin: 0 auto;
+  max-width: 300px;
+}
+
+ion-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  margin-left: 16px;
+}
+
+.username {
+  margin-left: 8px;
 }
 </style>

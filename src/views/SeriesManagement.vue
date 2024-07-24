@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { IonAccordion, IonAccordionGroup, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/vue'
+import SchoolList from '@/components/SchoolList.vue'
 
 export interface Institution {
   id: number
@@ -20,17 +21,15 @@ export default defineComponent({
     IonPage,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonButton,
-    IonIcon,
     IonList,
     IonItem,
     IonLabel,
     IonInput,
-    IonTextarea,
     IonAccordion,
     IonAccordionGroup,
+    SchoolList,
   },
   setup() {
     const loadFromLocalStorage = (): Institution[] => {
@@ -132,20 +131,11 @@ export default defineComponent({
       <ion-toolbar />
     </ion-header>
     <ion-content>
-      <ion-accordion-group>
-        <ion-accordion value="institutionsAccordion" class="accordion-item">
-          <ion-item slot="header" color="light">
-            <ion-label>Escolas Cadastradas</ion-label>
-          </ion-item>
-          <div slot="content">
-            <ion-list>
-              <ion-item v-for="institution in institutions" :key="institution.id" @click="openEditModel(institution)">
-                <ion-label>{{ institution.schools }}</ion-label>
-              </ion-item>
-            </ion-list>
-          </div>
-        </ion-accordion>
-      </ion-accordion-group>
+      <school-list
+        :institutions="institutions"
+        @edit-institution="openEditModel"
+        @delete-institution="deleteInstitution"
+      />
 
       <ion-modal :is-open="isAddModalOpen" css-class="my-custom-modal">
         <ion-content class="modal-content">
