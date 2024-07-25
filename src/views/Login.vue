@@ -43,13 +43,13 @@ export default defineComponent({
       <form class="form" @submit.prevent="login">
         <ion-item class="form-username">
           <ion-label position="stacked">
-            Username
+            Usuário
           </ion-label>
           <ion-input v-model="username" type="text" />
         </ion-item>
         <ion-item class="form-password">
           <ion-label position="stacked">
-            Password
+            Senha
           </ion-label>
           <ion-input v-model="password" type="password" />
         </ion-item>

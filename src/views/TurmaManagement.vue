@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue'
-import { IonAccordion, IonAccordionGroup, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/vue'
+import { IonAccordion, IonAccordionGroup, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonTextarea, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
 import TurmaList from '@/components/TurmaList.vue'
 
 export interface Institution {
@@ -31,6 +31,7 @@ export default defineComponent({
     IonInput,
     IonToolbar,
     TurmaList,
+    IonToast,
   },
   setup() {
     const loadFromLocalStorage = (): Institution[] => {
@@ -158,9 +159,10 @@ export default defineComponent({
               </ion-label>
               <ion-input v-model="institutionForm.discipline" placeholder="Adicionar disciplinas separadas por vírgula" />
             </ion-item>
-            <ion-button expand="block" @click="saveInstitution">
+            <ion-button id="open-toast" expand="block" @click="saveInstitution">
               {{ editMode ? 'Salvar Alterações' : 'Adicionar' }}
             </ion-button>
+            <ion-toast color="success" class="toast" trigger="open-toast" message="Edição realizada com sucesso!" :duration="5000" />
           </div>
         </ion-content>
       </ion-modal>
@@ -218,5 +220,18 @@ ion-button {
   max-width: 400px;
   margin: 0 auto;
   --border-radius: 10px; /* Borda arredondada */
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 1100px;
+  z-index: 1000;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 200px;
+  text-align: left;
+  transition: opacity 0.3s ease-in-out;
 }
 </style>
