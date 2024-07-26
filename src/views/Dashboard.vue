@@ -1,31 +1,8 @@
-<script lang="ts">
-import { IonBadge, IonButton, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonPage, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/vue'
 import { logoIonic } from 'ionicons/icons'
-import PieChart from '@/components/PieChart.vue' // Certifique-se de que o caminho está correto
+import PieChart from '@/components/PieChart.vue'
 import Notifications from '@/components/Notifications.vue'
-
-export default defineComponent({
-  components: {
-    IonButton,
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    IonIcon,
-    PieChart,
-    Notifications,
-    IonToast,
-    IonBadge,
-    IonItem,
-    IonLabel,
-  },
-  setup() {
-    return { logoIonic }
-  },
-})
 </script>
 
 <template>

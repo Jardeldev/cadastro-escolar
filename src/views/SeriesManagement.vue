@@ -1,9 +1,10 @@
-<script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue'
-import { IonAccordion, IonAccordionGroup, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonTextarea, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
+<script setup lang="ts">
+import { onMounted, ref, watch } from 'vue'
+import { IonAccordion, IonAccordionGroup, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
 import SchoolList from '@/components/SchoolList.vue'
 
-export interface Institution {
+// Interface que define a estrutura de uma instituição
+interface Institution {
   id: number
   name: string
   acronym: string
@@ -16,114 +17,91 @@ export interface Institution {
   turmas: string
 }
 
-export default defineComponent({
-  components: {
-    IonPage,
-    IonHeader,
-    IonToolbar,
-    IonContent,
-    IonButton,
-    IonList,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonAccordion,
-    IonAccordionGroup,
-    SchoolList,
-    IonToast,
-  },
-  setup() {
-    const loadFromLocalStorage = (): Institution[] => {
-      const data = localStorage.getItem('institutions')
-      return data ? JSON.parse(data) : []
-    }
+// Funções para manipular o localStorage
+function loadFromLocalStorage(): Institution[] {
+  const data = localStorage.getItem('institutions')
+  return data ? JSON.parse(data) : []
+}
 
-    const saveToLocalStorage = (data: Institution[]) => {
-      localStorage.setItem('institutions', JSON.stringify(data))
-    }
+function saveToLocalStorage(data: Institution[]) {
+  localStorage.setItem('institutions', JSON.stringify(data))
+}
 
-    const institutions = ref<Institution[]>(loadFromLocalStorage())
-    const selectedInstitution = ref<Institution | null>(null)
-    const isAddModalOpen = ref(false)
-    const editMode = ref(false)
-    const institutionForm = ref<{ name: string, series: string, turmas: string }>({ name: '', series: '', turmas: '' })
+const institutions = ref<Institution[] | any>(loadFromLocalStorage())
+const selectedInstitution = ref<Institution | null>(null)
+const isAddModalOpen = ref(false)
+const editMode = ref(false)
+const institutionForm = ref<{ name: string, series: string, turmas: string }>({ name: '', series: '', turmas: '' })
 
-    const openAddModel = () => {
-      isAddModalOpen.value = true
-      editMode.value = false
-      institutionForm.value = { name: '', series: '', turmas: '' }
-      selectedInstitution.value = null
-    }
+// Função para abrir o modal de adição
+function _openAddModel() {
+  isAddModalOpen.value = true
+  editMode.value = false
+  institutionForm.value = { name: '', series: '', turmas: '' }
+  selectedInstitution.value = null
+}
 
-    const openEditModel = (item: Institution) => {
-      selectedInstitution.value = item
-      institutionForm.value = { name: item.schools, series: item.series, turmas: item.turmas }
-      isAddModalOpen.value = true
-      editMode.value = true
-    }
+// Função para abrir o modal de edição
+function openEditModel(item: Institution) {
+  selectedInstitution.value = item
+  institutionForm.value = { name: item.schools, series: item.series, turmas: item.turmas }
+  isAddModalOpen.value = true
+  editMode.value = true
+}
 
-    const saveInstitution = async () => {
-      if (!selectedInstitution.value)
-        return
+// Função para salvar uma instituição (adicionar ou editar)
+async function saveInstitution() {
+  if (!selectedInstitution.value)
+    return
 
-      try {
-        if (editMode.value) {
-          const index = institutions.value.findIndex(i => i.id === selectedInstitution.value?.id)
-          if (index !== -1) {
-            institutions.value[index] = { ...institutions.value[index], schools: institutionForm.value.name, series: institutionForm.value.series, turmas: institutionForm.value.turmas }
-          }
-        }
-        else {
-          institutions.value.push({ ...institutionForm.value, id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', schools: '', series: '', turmas: '' })
-        }
-        saveToLocalStorage(institutions.value)
-        isAddModalOpen.value = false
-      }
-      catch (error) {
-        console.error('Error saving institution:', error)
+  try {
+    if (editMode.value) {
+      const index = institutions.value.findIndex((i: Institution) => i.id === selectedInstitution.value?.id)
+      if (index !== -1) {
+        institutions.value[index] = { ...institutions.value[index], schools: institutionForm.value.name, series: institutionForm.value.series, turmas: institutionForm.value.turmas }
       }
     }
-
-    const deleteInstitution = async (item: Institution) => {
-      try {
-        const index = institutions.value.findIndex(i => i.id === item.id)
-        if (index !== -1) {
-          institutions.value.splice(index, 1)
-          saveToLocalStorage(institutions.value)
-        }
-      }
-      catch (error) {
-        console.error('Error deleting institution:', error)
-      }
+    else {
+      institutions.value.push({ id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', schools: institutionForm.value.name, series: institutionForm.value.series, turmas: institutionForm.value.turmas,
+      })
     }
+    saveToLocalStorage(institutions.value)
+    isAddModalOpen.value = false
+  }
+  catch (error) {
+    console.error('Error saving institution:', error)
+  }
+}
 
-    onMounted(() => {
-      institutions.value = loadFromLocalStorage()
-    })
-
-    watch(
-      () => localStorage.getItem('institutions'),
-      (newVal, oldVal) => {
-        if (newVal !== oldVal) {
-          institutions.value = loadFromLocalStorage()
-        }
-      },
-      { deep: true },
-    )
-
-    return {
-      institutions,
-      selectedInstitution,
-      isAddModalOpen,
-      editMode,
-      institutionForm,
-      openAddModel,
-      openEditModel,
-      saveInstitution,
-      deleteInstitution,
+// Função para excluir uma instituição
+async function deleteInstitution(item: Institution) {
+  try {
+    const index = institutions.value.findIndex((i: Institution) => i.id === item.id)
+    if (index !== -1) {
+      institutions.value.splice(index, 1)
+      saveToLocalStorage(institutions.value)
     }
-  },
+  }
+  catch (error) {
+    console.error('Error deleting institution:', error)
+  }
+}
+
+// Carregar dados do localStorage quando o componente for montado
+onMounted(() => {
+  institutions.value = loadFromLocalStorage()
 })
+
+// Reatividade para atualizar a lista quando o localStorage mudar
+watch(
+  () => localStorage.getItem('institutions'),
+  (newVal: string | null, oldVal: string | null) => {
+    if (newVal !== oldVal) {
+      institutions.value = loadFromLocalStorage()
+    }
+  },
+  { deep: true },
+)
 </script>
 
 <template>
