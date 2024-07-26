@@ -10,34 +10,36 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint --config ./eslint.config.js . --fix",
-    "tsc": "vue-tsc"  
+    "tsc": "vue-tsc"
   },
   "dependencies": {
-    "@antfu/eslint-config": "^2.23.0",
+    "@antfu/eslint-config": "^2.23.2",
     "@capacitor/app": "6.0.0",
     "@capacitor/core": "6.1.0",
     "@capacitor/haptics": "6.0.0",
     "@capacitor/keyboard": "6.0.1",
     "@capacitor/status-bar": "6.0.0",
-    "@ionic/vue": "^8.2.5",
-    "@ionic/vue-router": "^8.2.5",
+    "@ionic/vue": "^8.2.6",
+    "@ionic/vue-router": "^8.2.6",
+    "chart.js": "^4.4.3",
     "ionicons": "^7.4.0",
-    "vue": "^3.4.33",
+    "vue": "^3.4.34",
+    "vue-chartjs": "^5.3.1",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@capacitor/cli": "6.1.0",
     "@vitejs/plugin-legacy": "^5.4.1",
-    "@vitejs/plugin-vue": "^5.0.5",
+    "@vitejs/plugin-vue": "^5.1.0",
     "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^9.7.0",
     "eslint-plugin-vue": "^9.27.0",
-    "jsdom": "^24.1.0",
+    "jsdom": "^24.1.1",
     "terser": "^5.31.3",
-    "typescript": "^5.5.3",
-    "vite": "~5.3.4",
-    "vitest": "^2.0.3",
-    "vue-tsc": "^2.0.26"
+    "typescript": "^5.5.4",
+    "vite": "~5.3.5",
+    "vitest": "^2.0.4",
+    "vue-tsc": "^2.0.29"
   }
 }
