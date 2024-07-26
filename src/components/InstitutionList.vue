@@ -1,6 +1,6 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { IonButton, IonItem, IonLabel, IonList } from '@ionic/vue'
+<script setup lang="ts">
+import { defineEmits, defineProps } from 'vue'
+import { IonAccordion, IonAccordionGroup, IonButton, IonItem, IonLabel, IonList } from '@ionic/vue'
 
 // Interface que define a estrutura de uma instituição
 export interface Institution {
@@ -19,35 +19,22 @@ export interface Institution {
   discipline: string
 }
 
-export default defineComponent({
-  components: {
-    IonList,
-    IonItem,
-    IonLabel,
-    IonButton,
-  },
-  props: {
-    institutions: {
-      type: Array as () => Institution[],
-      required: true,
-    },
-  },
-  emits: ['deleteInstitution', 'editInstitution'],
-  setup(props, { emit }) {
-    const deleteInstitution = (institution: Institution) => {
-      emit('deleteInstitution', institution)
-    }
+const _props = defineProps<{
+  institutions: Institution[]
+}>()
 
-    const editInstitution = (institution: Institution) => {
-      emit('editInstitution', institution)
-    }
+const emit = defineEmits<{
+  (e: 'deleteInstitution', institution: Institution): void
+  (e: 'editInstitution', institution: Institution): void
+}>()
 
-    return {
-      deleteInstitution,
-      editInstitution,
-    }
-  },
-})
+function deleteInstitution(institution: Institution) {
+  emit('deleteInstitution', institution)
+}
+
+function editInstitution(institution: Institution) {
+  emit('editInstitution', institution)
+}
 </script>
 
 <template>

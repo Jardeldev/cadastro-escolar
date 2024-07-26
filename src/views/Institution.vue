@@ -1,7 +1,8 @@
-<script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
 import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/vue'
 import { pencilOutline, trashOutline } from 'ionicons/icons'
+
 // Interface para representar uma instituição
 export interface Institution {
   id: number
@@ -19,98 +20,104 @@ export interface Institution {
   discipline: string
 }
 
-export default defineComponent({
-  components: {
-    IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonButton,
-    IonIcon,
-    IonList,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonTextarea,
-  },
-  setup() {
-    const icons = {
-      pencilOutline,
-      trashOutline,
-    }
-    // Função para carregar dados do localStorage
-    const saveToLocalStorage = (data: Institution[]) => {
-      localStorage.setItem('institutions', JSON.stringify(data))
-    }
-    // Função para salvar dados no localStorage
-    const loadFromLocalStorage = (): Institution[] => {
-      const data = localStorage.getItem('institutions')
-      return data ? JSON.parse(data) : []
-    }
-    // Referências para gerenciar o estado da aplicação
-    const institutions = ref<Institution[]>(loadFromLocalStorage())
-    const isAddModalOpen = ref(false)
-    const editMode = ref(false)
-    const institutionForm = ref<Institution>({ id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', schools: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' })
-    // Abre o modal para adicionar uma nova instituição
-    const openAddModel = () => {
-      isAddModalOpen.value = true
-      editMode.value = false
-      institutionForm.value = { id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', schools: '', series: '', turmas: '', teachers: '', schedule: '', discipline: '' }
-    }
-    // Abre o modal para editar uma instituição existente
-    const openEditModel = (item: Institution) => {
-      isAddModalOpen.value = true
-      editMode.value = true
-      institutionForm.value = { ...item }
-    }
-    // Salva ou atualiza uma instituição
-    const saveInstitution = async () => {
-      try {
-        if (editMode.value) {
-          const index = institutions.value.findIndex(i => i.id === institutionForm.value.id)
-          institutions.value[index] = { ...institutionForm.value }
-        }
-        else {
-          institutions.value.push({ ...institutionForm.value })
-        }
-        saveToLocalStorage(institutions.value)
-        isAddModalOpen.value = false
-      }
-      catch (error) {
-        console.error('Error saving institution:', error)
-      }
-    }
-    // Deleta uma instituição
-    const deleteInstitution = async (item: Institution) => {
-      try {
-        const index = institutions.value.findIndex(i => i.id === item.id)
-        institutions.value.splice(index, 1)
-        saveToLocalStorage(institutions.value)
-      }
-      catch (error) {
-        console.error('Error deleting institution:', error)
-      }
-    }
+// Ícones
+const icons = {
+  pencilOutline,
+  trashOutline,
+}
 
-    // Carregar dados do localStorage quando o componente for montado
-    onMounted(() => {
-      institutions.value = loadFromLocalStorage()
-    })
+// Função para carregar dados do localStorage
+function loadFromLocalStorage(): Institution[] {
+  const data = localStorage.getItem('institutions')
+  return data ? JSON.parse(data) : []
+}
 
-    return {
-      icons,
-      institutions,
-      isAddModalOpen,
-      editMode,
-      institutionForm,
-      openAddModel,
-      openEditModel,
-      saveInstitution,
-      deleteInstitution,
+// Função para salvar dados no localStorage
+function saveToLocalStorage(data: Institution[]) {
+  localStorage.setItem('institutions', JSON.stringify(data))
+}
+
+// Referências para gerenciar o estado da aplicação
+const institutions = ref<Institution[]>(loadFromLocalStorage())
+const isAddModalOpen = ref(false)
+const editMode = ref(false)
+const institutionForm = ref<Institution>({
+  id: Date.now(),
+  name: '',
+  acronym: '',
+  address: '',
+  phone: '',
+  email: '',
+  description: '',
+  schools: '',
+  series: '',
+  turmas: '',
+  teachers: '',
+  schedule: '',
+  discipline: '',
+})
+
+// Abre o modal para adicionar uma nova instituição
+function _openAddModel() {
+  isAddModalOpen.value = true
+  editMode.value = false
+  institutionForm.value = {
+    id: Date.now(),
+    name: '',
+    acronym: '',
+    address: '',
+    phone: '',
+    email: '',
+    description: '',
+    schools: '',
+    series: '',
+    turmas: '',
+    teachers: '',
+    schedule: '',
+    discipline: '',
+  }
+}
+
+// Abre o modal para editar uma instituição existente
+function openEditModel(item: Institution) {
+  isAddModalOpen.value = true
+  editMode.value = true
+  institutionForm.value = { ...item }
+}
+
+// Salva ou atualiza uma instituição
+async function saveInstitution() {
+  try {
+    if (editMode.value) {
+      const index = institutions.value.findIndex((i: Institution) => i.id === institutionForm.value.id)
+      institutions.value[index] = { ...institutionForm.value }
     }
-  },
+    else {
+      institutions.value.push({ ...institutionForm.value })
+    }
+    saveToLocalStorage(institutions.value)
+    isAddModalOpen.value = false
+  }
+  catch (error) {
+    console.error('Error saving institution:', error)
+  }
+}
+
+// Deleta uma instituição
+async function deleteInstitution(item: Institution) {
+  try {
+    const index = institutions.value.findIndex((i: Institution) => i.id === item.id)
+    institutions.value.splice(index, 1)
+    saveToLocalStorage(institutions.value)
+  }
+  catch (error) {
+    console.error('Error deleting institution:', error)
+  }
+}
+
+// Carregar dados do localStorage quando o componente for montado
+onMounted(() => {
+  institutions.value = loadFromLocalStorage()
 })
 </script>
 

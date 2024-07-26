@@ -1,9 +1,10 @@
-<script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue'
-import { IonAccordion, IonAccordionGroup, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonTextarea, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
+<script setup lang="ts">
+import { onMounted, ref, watch } from 'vue'
+import { IonAccordion, IonAccordionGroup, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
 import InstitutionList from '@/components/InstitutionList.vue'
+
 // Interface que define a estrutura de uma instituição
-export interface Institution {
+interface Institution {
   id: number
   name: string
   acronym: string
@@ -16,113 +17,101 @@ export interface Institution {
   turmas: string
 }
 
-export default defineComponent({
-  components: {
-    IonPage,
-    IonHeader,
-    IonToolbar,
-    IonContent,
-    IonButton,
-    IonList,
-    IonItem,
-    IonLabel,
-    IonInput,
-    InstitutionList,
-    IonToast,
-  },
-  setup() {
-    // Função para carregar dados do localStorage
-    const loadFromLocalStorage = (): Institution[] => {
-      const data = localStorage.getItem('institutions')
-      return data ? JSON.parse(data) : []
-    }
-    // Função para salvar dados no localStorage
-    const saveToLocalStorage = (data: Institution[]) => {
-      localStorage.setItem('institutions', JSON.stringify(data))
-    }
+// Função para carregar dados do localStorage
+function loadFromLocalStorage(): Institution[] {
+  const data = localStorage.getItem('institutions')
+  return data ? JSON.parse(data) : []
+}
 
-    const institutions = ref<Institution[]>(loadFromLocalStorage())
-    const selectedInstitution = ref<Institution | null>(null)
-    const isAddModalOpen = ref(false)
-    const editMode = ref(false)
-    const institutionForm = ref<{ name: string, series: string, turmas: string }>({ name: '', series: '', turmas: '' })
-    // Função para abrir o modal de adição
-    const openAddModel = () => {
-      isAddModalOpen.value = true
-      editMode.value = false
-      institutionForm.value = { name: '', series: '', turmas: '' }
-      selectedInstitution.value = null
-    }
-    // Função para abrir o modal de edição
-    const openEditModel = (item: Institution) => {
-      selectedInstitution.value = item
-      institutionForm.value = { name: item.schools, series: item.series, turmas: item.turmas }
-      isAddModalOpen.value = true
-      editMode.value = true
-    }
-    // Função para salvar uma instituição (adicionar ou editar)
-    const saveInstitution = async () => {
-      if (!selectedInstitution.value)
-        return
+// Função para salvar dados no localStorage
+function saveToLocalStorage(data: Institution[]) {
+  localStorage.setItem('institutions', JSON.stringify(data))
+}
 
-      try {
-        if (editMode.value) {
-          const index = institutions.value.findIndex(i => i.id === selectedInstitution.value?.id)
-          if (index !== -1) {
-            institutions.value[index] = { ...institutions.value[index], schools: institutionForm.value.name, series: institutionForm.value.series, turmas: institutionForm.value.turmas }
-          }
-        }
-        else {
-          institutions.value.push({ ...institutionForm.value, id: Date.now(), name: '', acronym: '', address: '', phone: '', email: '', description: '', schools: '', series: '', turmas: '' })
-        }
-        saveToLocalStorage(institutions.value)
-        isAddModalOpen.value = false
-      }
-      catch (error) {
-        console.error('Error saving institution:', error)
-      }
-    }
-    // Função para excluir uma instituição
-    const deleteInstitution = async (item: Institution) => {
-      try {
-        const index = institutions.value.findIndex(i => i.id === item.id)
-        if (index !== -1) {
-          institutions.value.splice(index, 1)
-          saveToLocalStorage(institutions.value)
-        }
-      }
-      catch (error) {
-        console.error('Error deleting institution:', error)
-      }
-    }
-    // Carrega os dados do localStorage quando o componente é montado
-    onMounted(() => {
-      institutions.value = loadFromLocalStorage()
-    })
-    // Assiste mudanças no localStorage e atualiza as instituições se necessário
-    watch(
-      () => localStorage.getItem('institutions'),
-      (newVal, oldVal) => {
-        if (newVal !== oldVal) {
-          institutions.value = loadFromLocalStorage()
-        }
-      },
-      { deep: true },
-    )
+const institutions = ref<Institution[]>(loadFromLocalStorage())
+const selectedInstitution = ref<Institution | null>(null)
+const editMode = ref(false)
+const institutionForm = ref<{ name: string, series: string, turmas: string }>({ name: '', series: '', turmas: '' })
 
-    return {
-      institutions,
-      selectedInstitution,
-      isAddModalOpen,
-      editMode,
-      institutionForm,
-      openAddModel,
-      openEditModel,
-      saveInstitution,
-      deleteInstitution,
+// Função para abrir o modal de adição
+function _openAddModel() {
+  editMode.value = false
+  institutionForm.value = { name: '', series: '', turmas: '' }
+  selectedInstitution.value = null
+}
+
+// Função para abrir o modal de edição
+function openEditModel(item: Institution) {
+  selectedInstitution.value = item
+  institutionForm.value = { name: item.schools, series: item.series, turmas: item.turmas }
+  editMode.value = true
+}
+
+// Função para salvar uma instituição (adicionar ou editar)
+async function saveInstitution() {
+  if (!selectedInstitution.value)
+    return
+
+  try {
+    if (editMode.value) {
+      const index = institutions.value.findIndex((i: Institution) => i.id === selectedInstitution.value?.id)
+      if (index !== -1) {
+        institutions.value[index] = {
+          ...institutions.value[index],
+          schools: institutionForm.value.name,
+          series: institutionForm.value.series,
+          turmas: institutionForm.value.turmas,
+        }
+      }
     }
-  },
+    else {
+      institutions.value.push({
+        id: Date.now(),
+        name: '',
+        acronym: '',
+        address: '',
+        phone: '',
+        email: '',
+        description: '',
+        schools: institutionForm.value.name,
+        series: institutionForm.value.series,
+        turmas: institutionForm.value.turmas,
+      })
+    }
+    saveToLocalStorage(institutions.value)
+  }
+  catch (error) {
+    console.error('Error saving institution:', error)
+  }
+}
+
+// Função para excluir uma instituição
+async function deleteInstitution(item: Institution) {
+  try {
+    const index = institutions.value.findIndex((i: Institution) => i.id === item.id)
+    if (index !== -1) {
+      institutions.value.splice(index, 1)
+      saveToLocalStorage(institutions.value)
+    }
+  }
+  catch (error) {
+    console.error('Error deleting institution:', error)
+  }
+}
+
+// Carrega os dados do localStorage quando o componente é montado
+onMounted(() => {
+  institutions.value = loadFromLocalStorage()
 })
+
+// Assiste mudanças no localStorage e atualiza as instituições se necessário
+watch(
+  institutions,
+  (newVal: Institution[]) => {
+    saveToLocalStorage(newVal)
+  },
+  { deep: true },
+)
 </script>
 
 <template>
@@ -137,34 +126,32 @@ export default defineComponent({
         @delete-institution="deleteInstitution"
       />
 
-      <ion-modal :is-open="isAddModalOpen" css-class="my-custom-modal">
-        <ion-content class="modal-content">
-          <div class="form-container">
-            <ion-item v-if="editMode && selectedInstitution" class="form-item">
-              <ion-label position="fixed">
-                Nome da Escola
-              </ion-label>
-              <ion-input v-model="institutionForm.name" required />
-            </ion-item>
-            <ion-item v-if="editMode && selectedInstitution" class="form-item">
-              <ion-label position="fixed">
-                Séries
-              </ion-label>
-              <ion-input v-model="institutionForm.series" required />
-            </ion-item>
-            <ion-item v-if="editMode && selectedInstitution" class="form-item">
-              <ion-label position="fixed">
-                Turmas
-              </ion-label>
-              <ion-input v-model="institutionForm.turmas" required />
-            </ion-item>
-            <ion-button id="open-toast" expand="block" @click="saveInstitution">
-              {{ editMode ? 'Salvar Alterações' : 'Adicionar' }}
-            </ion-button>
-            <ion-toast color="success" class="toast" trigger="open-toast" message="Edição realizada com sucesso!" :duration="5000" />
-          </div>
-        </ion-content>
-      </ion-modal>
+      <ion-content class="modal-content">
+        <div class="form-container">
+          <ion-item v-if="editMode && selectedInstitution" class="form-item">
+            <ion-label position="fixed">
+              Nome da Escola
+            </ion-label>
+            <ion-input v-model="institutionForm.name" required />
+          </ion-item>
+          <ion-item v-if="editMode && selectedInstitution" class="form-item">
+            <ion-label position="fixed">
+              Séries
+            </ion-label>
+            <ion-input v-model="institutionForm.series" required />
+          </ion-item>
+          <ion-item v-if="editMode && selectedInstitution" class="form-item">
+            <ion-label position="fixed">
+              Turmas
+            </ion-label>
+            <ion-input v-model="institutionForm.turmas" required />
+          </ion-item>
+          <ion-button id="open-toast" expand="block" @click="saveInstitution">
+            {{ editMode ? 'Salvar Alterações' : 'Adicionar' }}
+          </ion-button>
+          <ion-toast color="success" class="toast" trigger="open-toast" message="Edição realizada com sucesso!" :duration="5000" />
+        </div>
+      </ion-content>
     </ion-content>
   </ion-page>
 </template>
@@ -173,7 +160,7 @@ export default defineComponent({
 .accordion-item {
   width: 100%;
   max-width: 500px;
-  margin: 10px auto; /* Adicionando margem para centralizar */
+  margin: 10px auto;
 }
 
 .modal-content {
