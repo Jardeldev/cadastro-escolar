@@ -27,7 +27,7 @@ function saveToLocalStorage(data: Institution[]) {
   localStorage.setItem('institutions', JSON.stringify(data))
 }
 
-const institutions = ref<Institution[]>(loadFromLocalStorage())
+const institutions = ref<Institution[] | any>(loadFromLocalStorage())
 const selectedInstitution = ref<Institution | null>(null)
 const isAddModalOpen = ref(false)
 const editMode = ref(false)

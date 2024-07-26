@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { IonAccordion, IonAccordionGroup, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
+import { IonButton, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonToast, IonToolbar } from '@ionic/vue'
 import InstitutionList from '@/components/InstitutionList.vue'
 
 // Interface que define a estrutura de uma instituição
@@ -28,17 +28,10 @@ function saveToLocalStorage(data: Institution[]) {
   localStorage.setItem('institutions', JSON.stringify(data))
 }
 
-const institutions = ref<Institution[]>(loadFromLocalStorage())
+const institutions: Institution[] | any = ref(loadFromLocalStorage())
 const selectedInstitution = ref<Institution | null>(null)
 const editMode = ref(false)
 const institutionForm = ref<{ name: string, series: string, turmas: string }>({ name: '', series: '', turmas: '' })
-
-// Função para abrir o modal de adição
-function _openAddModel() {
-  editMode.value = false
-  institutionForm.value = { name: '', series: '', turmas: '' }
-  selectedInstitution.value = null
-}
 
 // Função para abrir o modal de edição
 function openEditModel(item: Institution) {

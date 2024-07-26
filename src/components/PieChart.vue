@@ -21,7 +21,7 @@ const chartData = ref({
 })
 
 // Opções do gráfico
-const chartOptions = {
+const chartOptions: any = {
   responsive: true,
   plugins: {
     legend: {
