@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
+import { IonAvatar, IonButton, IonChip, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
+import { close, closeCircle, pin } from 'ionicons/icons'
+import { maskito as vMaskito } from '@maskito/vue';
+import { maskitoTransform } from '@maskito/core';
 
 // Interface que define a estrutura de uma instituição
 export interface Institution {
@@ -11,13 +14,27 @@ export interface Institution {
   phone: string
   email: string
   description: string
-  schools: string
-  series: string
-  turmas: string
-  teachers: string
-  schedule: string
-  discipline: string
+  schools: string[]
+  series: string[]
+  turmas: string[]
+  teachers: string[]
+  schedule: string[]
+  discipline: string[]
 }
+
+const phoneOptions = {
+  mask: [ '(', /\d/, /\d/, ')', ' ', /\d/, ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
+    elementPredicate: (el: HTMLIonInputElement) => {
+      return new Promise((resolve) => {
+        requestAnimationFrame(async () => {
+          const input = await el.getInputElement();
+          resolve(input);
+        });
+      });
+    },
+  };
+  // If you need to set an initial value, you can use maskitoTransform to ensure the value is valid
+  const myPhoneNumber = ref(maskitoTransform('5555551212', phoneOptions));
 
 // Função para carregar dados do localStorage
 function loadFromLocalStorage(): Institution[] {
@@ -41,6 +58,15 @@ const institutionForm = ref<Institution>({
   phone: '',
   email: '',
   description: '',
+  schools: [],
+  series: [],
+  turmas: [],
+  teachers: [],
+  schedule: [],
+  discipline: [],
+})
+
+const inputValues = ref({
   schools: '',
   series: '',
   turmas: '',
@@ -60,12 +86,12 @@ function _openAddModel() {
     phone: '',
     email: '',
     description: '',
-    schools: '',
-    series: '',
-    turmas: '',
-    teachers: '',
-    schedule: '',
-    discipline: '',
+    schools: [],
+    series: [],
+    turmas: [],
+    teachers: [],
+    schedule: [],
+    discipline: [],
   }
 }
 
@@ -105,6 +131,31 @@ async function _deleteInstitution(item: Institution) {
   }
   catch (error) {
     console.error('Error deleting institution:', error)
+  }
+}
+
+function addItem(field: keyof Institution, value: string) {
+  if (value.trim()) {
+    institutionForm.value[field].push(value.trim())
+    inputValues.value[field] = ''
+  }
+}
+
+function removeItem(field: keyof Institution, index: number) {
+  institutionForm.value[field].splice(index, 1)
+}
+
+function handleInput(field: keyof Institution, event: Event) {
+  const input = event.target as HTMLInputElement
+  const value = input.value
+
+  if (value.endsWith(',')) {
+    const items = value.split(',').filter(item => item.trim())
+    items.forEach(item => addItem(field, item.trim()))
+    input.value = ''
+  }
+  else {
+    inputValues.value[field] = value
   }
 }
 
@@ -158,7 +209,7 @@ watch(
             <ion-label position="fixed">
               Telefone *
             </ion-label>
-            <ion-input v-model="institutionForm.phone" required />
+            <ion-input v-model="institutionForm.phone" v-maskito="phoneOptions" placeholder="(99) 9 9999-9999" required />
           </ion-item>
           <ion-item class="form-item">
             <ion-label position="fixed">
@@ -176,7 +227,17 @@ watch(
             <ion-label position="fixed">
               Nome da Escola
             </ion-label>
-            <ion-input v-model="institutionForm.schools" placeholder="Adicionar escolas separadas por vírgula" />
+            <ion-textarea
+              :value="inputValues.schools"
+              placeholder="Adicionar escolas separadas por vírgula"
+              @keyup="handleInput('schools', $event)"
+            />
+            <div class="chip-container">
+              <ion-chip v-for="(school, index) in institutionForm.schools" :key="index">
+                <ion-label>{{ school }}</ion-label>
+                <ion-icon :icon="closeCircle" @click="removeItem('schools', index)" />
+              </ion-chip>
+            </div>
           </ion-item>
           <ion-item class="form-item">
             <ion-label position="fixed">
@@ -238,7 +299,7 @@ watch(
 
 .form-item {
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   margin: 5px 0; /* Diminuindo o espaçamento vertical */
 }
 
@@ -248,6 +309,27 @@ ion-item.form-item {
   --border-radius: 10px; /* Borda arredondada */
   --padding-bottom: 8px;
   --padding-top: 8px;
+  --min-height: 60px;
+}
+
+ion-input,
+ion-textarea {
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+ion-textarea {
+  resize: vertical;
+}
+
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 5px;
+
 }
 
 ion-button {
