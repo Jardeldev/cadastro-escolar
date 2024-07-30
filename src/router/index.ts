@@ -11,6 +11,7 @@ import Institution from '@/views/Institution.vue'
 import School from '@/views/School.vue'
 import Series from '@/views/Series.vue'
 import Turma from '@/views/Turma.vue'
+import Timetable from '@/views/Timetable.vue'
 
 const routes = [
   {
@@ -66,6 +67,11 @@ const routes = [
   {
     path: '/turmas/lista',
     component: Turma,
+  },
+
+  {
+    path: '/horarios',
+    component: Timetable,
   },
 
 ]

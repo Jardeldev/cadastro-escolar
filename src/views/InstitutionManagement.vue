@@ -2,8 +2,8 @@
 import { onMounted, ref, watch } from 'vue'
 import { IonAvatar, IonButton, IonChip, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
 import { close, closeCircle, pin } from 'ionicons/icons'
-import { maskito as vMaskito } from '@maskito/vue';
-import { maskitoTransform } from '@maskito/core';
+import { maskito as vMaskito } from '@maskito/vue'
+import { maskitoTransform } from '@maskito/core'
 
 // Interface que define a estrutura de uma instituição
 export interface Institution {
@@ -23,18 +23,18 @@ export interface Institution {
 }
 
 const phoneOptions = {
-  mask: [ '(', /\d/, /\d/, ')', ' ', /\d/, ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
-    elementPredicate: (el: HTMLIonInputElement) => {
-      return new Promise((resolve) => {
-        requestAnimationFrame(async () => {
-          const input = await el.getInputElement();
-          resolve(input);
-        });
-      });
-    },
-  };
-  // If you need to set an initial value, you can use maskitoTransform to ensure the value is valid
-  const myPhoneNumber = ref(maskitoTransform('5555551212', phoneOptions));
+  mask: ['(', /\d/, /\d/, ')', ' ', /\d/, ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
+  elementPredicate: (el: HTMLIonInputElement) => {
+    return new Promise((resolve) => {
+      requestAnimationFrame(async () => {
+        const input = await el.getInputElement()
+        resolve(input)
+      })
+    })
+  },
+}
+// If you need to set an initial value, you can use maskitoTransform to ensure the value is valid
+const myPhoneNumber = ref(maskitoTransform('5555551212', phoneOptions))
 
 // Função para carregar dados do localStorage
 function loadFromLocalStorage(): Institution[] {
@@ -66,7 +66,7 @@ const institutionForm = ref<Institution>({
   discipline: [],
 })
 
-const inputValues = ref({
+const inputValues = ref<Record<keyof Institution, string>>({
   schools: '',
   series: '',
   turmas: '',
@@ -136,13 +136,22 @@ async function _deleteInstitution(item: Institution) {
 
 function addItem(field: keyof Institution, value: string) {
   if (value.trim()) {
-    institutionForm.value[field].push(value.trim())
+    // Verifica se o campo é um array
+    if (Array.isArray(institutionForm.value[field])) {
+      (institutionForm.value[field] as string[]).push(value.trim())
+    }
+    else {
+      // Se o campo não é um array, inicializa como um array de strings
+      institutionForm.value[field] = [value.trim()]
+    }
     inputValues.value[field] = ''
   }
 }
 
 function removeItem(field: keyof Institution, index: number) {
-  institutionForm.value[field].splice(index, 1)
+  if (Array.isArray(institutionForm.value[field])) {
+    (institutionForm.value[field] as string[]).splice(index, 1)
+  }
 }
 
 function handleInput(field: keyof Institution, event: Event) {

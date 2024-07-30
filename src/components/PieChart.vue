@@ -52,7 +52,7 @@ onMounted(() => {
   <div class="chart-container">
     <pie v-if="chartData.datasets[0].data.length" :data="chartData" :options="chartOptions" />
     <p v-else>
-      No data available
+      Dados indisponíveis
     </p>
   </div>
 </template>

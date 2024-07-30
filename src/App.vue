@@ -79,6 +79,9 @@ function goToRoute(route: string) {
               <ion-button expand="block" @click="goToRoute('/turmas')">
                 Detalhes
               </ion-button>
+              <ion-button expand="block" @click="goToRoute('/horarios')">
+                Horário Escolar
+              </ion-button>
             </div>
           </ion-accordion>
         </ion-accordion-group>
