@@ -104,6 +104,10 @@ function _openEditModel(item: Institution) {
 // Salva ou atualiza uma instituição
 async function saveInstitution() {
   try {
+    if (!validateRequiredFields()) {
+      return
+    }
+
     if (editMode.value) {
       const index = institutions.value.findIndex((i: Institution) => i.id === institutionForm.value.id)
       if (index !== -1) {
@@ -118,6 +122,27 @@ async function saveInstitution() {
   catch (error) {
     console.error('Error saving institution:', error)
   }
+}
+
+function validateRequiredFields(): boolean {
+  let isValid = true
+  // Campos obrigatórios
+  const requiredFields = ['name', 'acronym', 'address', 'phone', 'email'] as (keyof Institution)[]
+
+  requiredFields.forEach((field) => {
+    const input = document.querySelector(`[data-field="${field}"]`) as HTMLIonInputElement
+    if (input) {
+      if (!institutionForm.value[field]) {
+        input.classList.add('ion-invalid')
+        isValid = false
+      }
+      else {
+        input.classList.remove('ion-invalid')
+      }
+    }
+  })
+
+  return isValid
 }
 
 // Deleta uma instituição
@@ -200,31 +225,31 @@ watch(
             <ion-label position="fixed">
               Nome *
             </ion-label>
-            <ion-input v-model="institutionForm.name" required />
+            <ion-input v-model="institutionForm.name" data-field="name" required />
           </ion-item>
           <ion-item class="form-item">
             <ion-label position="fixed">
               Sigla *
             </ion-label>
-            <ion-input v-model="institutionForm.acronym" required />
+            <ion-input v-model="institutionForm.acronym" data-field="acronym" required />
           </ion-item>
           <ion-item class="form-item">
             <ion-label position="fixed">
               Endereço *
             </ion-label>
-            <ion-input v-model="institutionForm.address" required />
+            <ion-input v-model="institutionForm.address" data-field="address" required />
           </ion-item>
           <ion-item class="form-item">
             <ion-label position="fixed">
               Telefone *
             </ion-label>
-            <ion-input v-model="institutionForm.phone" v-maskito="phoneOptions" placeholder="(99) 9 9999-9999" required />
+            <ion-input v-model="institutionForm.phone" v-maskito="phoneOptions" placeholder="(99) 9 9999-9999" data-field="phone" required />
           </ion-item>
           <ion-item class="form-item">
             <ion-label position="fixed">
               E-mail *
             </ion-label>
-            <ion-input v-model="institutionForm.email" type="email" required />
+            <ion-input v-model="institutionForm.email" type="email" data-field="email" required />
           </ion-item>
           <ion-item class="form-item">
             <ion-label position="fixed">
@@ -236,17 +261,11 @@ watch(
             <ion-label position="fixed">
               Nome da Escola
             </ion-label>
-            <ion-textarea
+            <ion-input
               :value="inputValues.schools"
               placeholder="Adicionar escolas separadas por vírgula"
               @keyup="handleInput('schools', $event)"
             />
-            <div class="chip-container">
-              <ion-chip v-for="(school, index) in institutionForm.schools" :key="index">
-                <ion-label>{{ school }}</ion-label>
-                <ion-icon :icon="closeCircle" @click="removeItem('schools', index)" />
-              </ion-chip>
-            </div>
           </ion-item>
           <ion-item class="form-item">
             <ion-label position="fixed">
@@ -285,6 +304,12 @@ watch(
         </div>
       </ion-content>
     </ion-content>
+    <ion-chip v-for="(school, index) in institutionForm.schools" :key="index" class="chip-container">
+      <ion-label class="chip-container">
+        {{ school }}
+      </ion-label>
+      <ion-icon :icon="closeCircle" @click="removeItem('schools', index)" />
+    </ion-chip>
   </ion-page>
 </template>
 
@@ -334,11 +359,11 @@ ion-textarea {
 }
 
 .chip-container {
-  display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 5px;
-
+  width: 100%;
+  max-width: 130px;
 }
 
 ion-button {
@@ -366,5 +391,9 @@ ion-button {
   max-width: 200px;
   text-align: left;
   transition: opacity 0.3s ease-in-out;
+}
+
+.ion-invalid {
+  border: 1px solid red !important;
 }
 </style>

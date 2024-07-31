@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/vue'
+import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToast, IonToolbar } from '@ionic/vue'
 import { pencilOutline, trashOutline } from 'ionicons/icons'
 
 // Interface para representar uma instituição
@@ -96,7 +96,7 @@ async function saveInstitution() {
       institutions.value.push({ ...institutionForm.value })
     }
     saveToLocalStorage(institutions.value)
-    isAddModalOpen.value = false
+    isAddModalOpen.value = true
   }
   catch (error) {
     console.error('Error saving institution:', error)
@@ -217,9 +217,10 @@ onMounted(() => {
             </ion-label>
             <ion-input v-model="institutionForm.discipline" placeholder="Adicionar escolas separadas por vírgula" />
           </ion-item>
-          <ion-button expand="block" @click="saveInstitution">
+          <ion-button id="open-toast" expand="block" @click="saveInstitution">
             {{ editMode ? 'Salvar Alterações' : 'Adicionar' }}
           </ion-button>
+          <ion-toast color="success" class="toast" trigger="open-toast" message="Instituição adicionada com sucesso!" :duration="5000" />
         </div>
       </div>
     </ion-content>
@@ -242,5 +243,18 @@ onMounted(() => {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 1100px;
+  z-index: 1000;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 200px;
+  text-align: left;
+  transition: opacity 0.3s ease-in-out;
 }
 </style>
